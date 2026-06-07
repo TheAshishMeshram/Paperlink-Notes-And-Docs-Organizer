@@ -1,0 +1,3784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paperlink Connecting... — Digital Document Organizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale: #F7EDD3;
+      --gold-deep: #8B6914;
+      --gold-glow: #F5D98B;
+      --white: #FEFCF8;
+      --off-white: #F5F0E8;
+      --cream: #EDE5D4;
+      --ink: #1A1610;
+      --ink-mid: #3D3325;
+      --ink-soft: #6B5B42;
+      --ink-muted: #9C8B72;
+      --border: rgba(201, 168, 76, 0.25);
+      --border-strong: rgba(201, 168, 76, 0.5);
+      --shadow: 0 4px 32px rgba(139, 105, 20, 0.1);
+      --shadow-lg: 0 12px 60px rgba(139, 105, 20, 0.16);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 20px;
+      --header-bg: #D5C069;
+      --btn-header-bg: #3D3325;
+      --btn-header-border: #8B6914;
+      --header-text: #4A3B12;
+      --header-text-span: #5C4A1A;
+      --header-stats-label: rgba(74, 59, 18, 0.85);
+    }
+
+    body.dark-mode {
+      --gold: #D5C069;
+      --gold-light: #F2E3A4;
+      --gold-pale: #262118;
+      --gold-deep: #BFA74E;
+      --gold-glow: #F7EAB0;
+      --white: #1A1713;
+      --off-white: #12100E;
+      --cream: #262018;
+      --ink: #F7F3EB;
+      --ink-mid: #ECE3D7;
+      --ink-soft: #D4C6B5;
+      --ink-muted: #968875;
+      --border: rgba(232, 201, 122, 0.15);
+      --border-strong: rgba(232, 201, 122, 0.35);
+      --shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 60px rgba(0, 0, 0, 0.65);
+      --header-bg: #211C13;
+      --btn-header-bg: #2E261B;
+      --btn-header-border: #D5C069;
+      --header-text: #F2E3A4;
+      --header-text-span: #FEFCF8;
+      --header-stats-label: rgba(242, 227, 164, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--off-white);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(201, 168, 76, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg, #D5C069);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      transition: background-color 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--white);
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--header-text);
+      letter-spacing: 0.02em;
+    }
+
+    .brand-name span {
+      color: var(--header-text-span);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 2px solid var(--btn-header-border);
+      border-radius: var(--radius-sm);
+      /* curved corners */
+      background: var(--header-bg);
+      /* bg matching header bg */
+      color: white !important;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .header-btn:hover {
+      background: var(--btn-header-bg);
+      border-color: var(--gold-light);
+      color: white !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
+    }
+
+    .header-btn.gold {
+      background: var(--btn-header-bg);
+      border-color: var(--gold-light);
+      color: white !important;
+    }
+
+    .header-btn.gold:hover {
+      background: var(--header-bg);
+      border-color: var(--gold);
+      color: white !important;
+    }
+
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--header-stats-label);
+    }
+
+    .stats-bar strong {
+      color: var(--header-text);
+      font-weight: 600;
+    }
+
+    /* === TOP PROGRESS BAR === */
+    #nprogress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    #nprogress-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-deep) 0%, var(--gold) 40%, var(--gold-light) 70%, var(--gold-glow) 100%);
+      width: 0%;
+      opacity: 0;
+      transition: width 0.25s ease, opacity 0.3s ease;
+      position: relative;
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.7), 0 0 4px rgba(201, 168, 76, 0.5);
+    }
+
+    #nprogress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -2px;
+      width: 80px;
+      height: 7px;
+      background: radial-gradient(ellipse at right, rgba(248, 220, 120, 0.9) 0%, transparent 80%);
+      border-radius: 4px;
+    }
+
+    /* === TAB BAR === */
+    .tabbar {
+      position: sticky;
+      top: 64px;
+      z-index: 90;
+      background: var(--white);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: stretch;
+      height: 48px;
+      gap: 0;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .tabbar-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      position: relative;
+    }
+
+    .tabbar-tab:hover {
+      color: var(--ink);
+    }
+
+    .tabbar-tab.active {
+      color: var(--gold-deep);
+      border-bottom-color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tabbar-tab .tab-icon {
+      font-size: 15px;
+    }
+
+    .tabbar-tab .tab-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 1px 5px;
+      letter-spacing: 0.04em;
+    }
+
+    .tabbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tabbar-kbd {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-muted);
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+
+    /* === LAYOUT === */
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 112px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === SIDEBAR === */
+    aside {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: sticky;
+      top: 112px;
+      height: calc(100vh - 112px);
+      overflow-y: auto;
+    }
+
+    /* === INFO PAGES === */
+    .info-page {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 32px;
+    }
+
+    .info-page.active {
+      display: block;
+    }
+
+    .info-hero {
+      text-align: center;
+      padding: 56px 32px 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+      position: relative;
+    }
+
+    .info-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .info-hero-icon {
+      font-size: 52px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .info-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .info-hero h1 em {
+      color: var(--gold-deep);
+      font-style: italic;
+    }
+
+    .info-hero p {
+      font-size: 16px;
+      color: var(--ink-soft);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto 28px;
+    }
+
+    .info-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .info-hero-tag {
+      padding: 5px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gold-deep);
+      background: var(--gold-pale);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .info-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      transition: all 0.2s;
+    }
+
+    .info-card:hover {
+      border-color: var(--gold);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .info-card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .info-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .info-card p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+
+    .info-section {
+      margin-bottom: 48px;
+    }
+
+    .info-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .info-section-title em {
+      color: var(--gold-deep);
+      font-style: italic;
+    }
+
+    .info-section-sub {
+      font-size: 14px;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .guideline-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .guideline-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .step-body h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .step-body code {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      background: var(--cream);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--gold-deep);
+      border: 1px solid var(--border);
+    }
+
+    .kbd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .kbd-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: all 0.15s;
+    }
+
+    .kbd-row:hover {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+
+    .kbd-desc {
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .kbd-keys {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .kbd-key {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--cream);
+      border: 1px solid var(--border-strong);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      padding: 3px 8px;
+      color: var(--ink);
+      box-shadow: 0 1px 0 rgba(139, 105, 20, 0.2);
+    }
+
+    .kbd-plus {
+      font-size: 10px;
+      color: var(--ink-muted);
+    }
+
+    .changelog-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .changelog-item:last-child {
+      border-bottom: none;
+    }
+
+    .changelog-ver {
+      flex-shrink: 0;
+      width: 72px;
+      text-align: right;
+    }
+
+    .changelog-ver .ver-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold-deep);
+      display: block;
+    }
+
+    .changelog-ver .ver-date {
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .changelog-dots {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+      gap: 0;
+    }
+
+    .changelog-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      border: 2px solid var(--gold-pale);
+    }
+
+    .changelog-line {
+      flex: 1;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--border) 100%);
+      min-height: 20px;
+    }
+
+    .changelog-body h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .changelog-body ul {
+      padding-left: 16px;
+    }
+
+    .changelog-body li {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin-bottom: 2px;
+    }
+
+    .changelog-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .tag-new {
+      background: #ECFDF5;
+      color: #065F46;
+    }
+
+    .tag-fix {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .tag-improve {
+      background: #EFF6FF;
+      color: #1E40AF;
+    }
+
+    .tip-box {
+      background: var(--gold-pale);
+      border: 1px solid var(--border-strong);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .tip-box strong {
+      color: var(--gold-deep);
+    }
+
+    .sidebar-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      padding: 8px 12px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      border: 1px solid transparent;
+      position: relative;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: var(--gold-pale);
+      color: var(--ink);
+    }
+
+    .nav-item.active {
+      background: var(--gold-pale);
+      border-color: var(--border);
+      color: var(--gold-deep);
+      font-weight: 500;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-item .nav-dl {
+      display: none;
+      margin-left: 4px;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--white);
+      color: var(--gold-deep);
+      font-size: 11px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .nav-item:hover .nav-dl {
+      display: flex;
+    }
+
+    .nav-item .nav-dl:hover {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
+
+    .nav-item .nav-count {
+      margin-left: auto;
+      background: var(--gold-pale);
+      color: var(--gold-deep);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .nav-item.active .nav-count {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
+
+    .nav-color-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 12px;
+    }
+
+    .storage-bar-wrap {
+      margin-top: auto;
+      padding: 12px;
+      background: var(--off-white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .storage-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .storage-bar-label strong {
+      color: var(--gold-deep);
+    }
+
+    .storage-bar-track {
+      height: 4px;
+      background: var(--cream);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .storage-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+      border-radius: 4px;
+      transition: width 0.5s;
+    }
+
+    /* === MAIN CONTENT === */
+    main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    /* === UPLOAD ZONE === */
+    .upload-zone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 48px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: var(--white);
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-zone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragging {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+
+    .upload-zone.dragging {
+      transform: scale(1.005);
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .upload-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .upload-sub {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .upload-types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .type-badge {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      color: var(--ink-soft);
+      background: var(--white);
+    }
+
+    /* === VIEW CONTROLS === */
+    .view-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .view-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    .view-title span {
+      color: var(--gold-deep);
+      font-style: italic;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      padding: 8px 14px 8px 36px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink);
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--gold);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--ink-muted);
+      pointer-events: none;
+    }
+
+    .sort-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .view-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .view-toggle button {
+      padding: 7px 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-muted);
+      font-size: 15px;
+      transition: all 0.15s;
+    }
+
+    .view-toggle button.active {
+      background: var(--gold-pale);
+      color: var(--gold-deep);
+    }
+
+    /* === FILE GRID / LIST === */
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Grid card */
+    .file-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .file-card:hover {
+      border-color: var(--gold);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .file-card.selected {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+
+    .file-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .file-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .file-actions-quick {
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .file-card:hover .file-actions-quick {
+      opacity: 1;
+    }
+
+    .icon-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--ink-soft);
+      transition: all 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      color: var(--gold-deep);
+    }
+
+    .icon-btn.danger:hover {
+      background: #FEF2F2;
+      border-color: #FCA5A5;
+      color: #DC2626;
+    }
+
+    .file-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      word-break: break-word;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .file-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .file-meta span {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .file-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: auto;
+    }
+
+    /* List row */
+    .file-row {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .file-row:hover {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+
+    .file-row.selected {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+
+    .file-row .file-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .file-row .file-name {
+      font-size: 14px;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: unset;
+    }
+
+    .file-row .file-meta {
+      font-size: 12px;
+      min-width: 80px;
+    }
+
+    .file-row .file-tag {
+      margin: 0;
+    }
+
+    .file-row .file-actions-quick {
+      opacity: 0;
+    }
+
+    .file-row:hover .file-actions-quick {
+      opacity: 1;
+    }
+
+    /* === FOLDER SECTION === */
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .folder-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .folder-card:hover {
+      border-color: var(--gold);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .folder-icon {
+      font-size: 28px;
+    }
+
+    .folder-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .folder-count {
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 11px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--gold-deep);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .section-dl-btn:hover {
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.18);
+    }
+
+    .section-dl-btn:active {
+      transform: translateY(0);
+    }
+
+    .section-dl-btn .dl-spinner {
+      display: none;
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--gold-pale);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    .section-dl-btn.loading .dl-spinner {
+      display: inline-block;
+    }
+
+    .section-dl-btn.loading .dl-icon {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* === EMPTY STATE === */
+    .empty-state {
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--ink-muted);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-state h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* === MODAL === */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(26, 22, 16, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      width: 90%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 24px 28px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: var(--gold-pale);
+      border-color: var(--gold);
+    }
+
+    .modal-body {
+      padding: 20px 28px 28px;
+    }
+
+    .file-preview-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .file-preview-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .detail-value {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .tag-input-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      min-height: 40px;
+      cursor: text;
+    }
+
+    .tag-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: var(--gold-pale);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gold-deep);
+    }
+
+    .tag-chip button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--ink-muted);
+      font-size: 11px;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .tag-chip button:hover {
+      color: #DC2626;
+    }
+
+    .tag-input {
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink);
+      min-width: 80px;
+      flex: 1;
+      background: transparent;
+    }
+
+    .notes-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink);
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    .notes-textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      color: var(--ink-soft);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      color: var(--gold-deep);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      color: white;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-deep);
+      border-color: var(--gold-deep);
+    }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid #FCA5A5;
+      color: #DC2626;
+    }
+
+    .btn-danger:hover {
+      background: #FEF2F2;
+    }
+
+    /* === TOAST === */
+    .toast-wrap {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+    }
+
+    .toast {
+      background: var(--ink);
+      color: var(--gold-glow);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.3s ease;
+      max-width: 320px;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .toast.success {
+      background: var(--ink);
+      border-left: 3px solid #4CAF50;
+    }
+
+    .toast.error {
+      border-left: 3px solid #EF4444;
+    }
+
+    .toast.info {
+      border-left: 3px solid var(--gold);
+    }
+
+    /* === PROGRESS BAR === */
+    .upload-progress {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .upload-progress.active {
+      display: block;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--cream);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+      border-radius: 4px;
+      transition: width 0.3s;
+      width: 0%;
+    }
+
+    /* === SELECT-ALL BAR === */
+    .bulk-bar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: var(--gold-pale);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+
+    .bulk-bar.active {
+      display: flex;
+    }
+
+    .bulk-count {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold-deep);
+      flex: 1;
+    }
+
+    /* === CATEGORY COLORS === */
+    .cat-document {
+      background: #EEF2FF;
+      color: #4338CA;
+    }
+
+    .cat-image {
+      background: #F0FDF4;
+      color: #16A34A;
+    }
+
+    .cat-video {
+      background: #FFF7ED;
+      color: #EA580C;
+    }
+
+    .cat-audio {
+      background: #FDF4FF;
+      color: #9333EA;
+    }
+
+    .cat-archive {
+      background: #FFFBEB;
+      color: #D97706;
+    }
+
+    .cat-code {
+      background: #F0F9FF;
+      color: #0284C7;
+    }
+
+    .cat-spreadsheet {
+      background: #F0FDF4;
+      color: #15803D;
+    }
+
+    .cat-other {
+      background: #F8FAFC;
+      color: #64748B;
+    }
+
+    .cat-note {
+      background: var(--gold-pale);
+      color: var(--gold-deep);
+    }
+
+    .icon-document {
+      background: #EEF2FF;
+    }
+
+    .icon-image {
+      background: #F0FDF4;
+    }
+
+    .icon-video {
+      background: #FFF7ED;
+    }
+
+    .icon-audio {
+      background: #FDF4FF;
+    }
+
+    .icon-archive {
+      background: #FFFBEB;
+    }
+
+    .icon-code {
+      background: #F0F9FF;
+    }
+
+    .icon-spreadsheet {
+      background: #F0FDF4;
+    }
+
+    .icon-other {
+      background: #F8FAFC;
+    }
+
+    .icon-note {
+      background: var(--gold-pale);
+    }
+
+    /* === QUICK NOTE === */
+    .quick-note-editor {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 28px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .quick-note-editor.active {
+      display: block;
+    }
+
+    .quick-note-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--off-white);
+    }
+
+    .quick-note-toolbar input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    .quick-note-textarea {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.7;
+      resize: none;
+      min-height: 140px;
+      background: transparent;
+    }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 12px;
+        gap: 4px;
+        top: 0;
+      }
+
+      .sidebar-section-title,
+      .sidebar-divider,
+      .storage-bar-wrap {
+        display: none;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .stats-bar {
+        display: none;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabbar {
+        padding: 0 1rem;
+        gap: 0;
+        overflow-x: auto;
+      }
+
+      .tabbar-tab {
+        padding: 0 12px;
+        font-size: 12px;
+      }
+
+      .tabbar-kbd {
+        display: none;
+      }
+
+      .info-hero h1 {
+        font-size: 30px;
+      }
+
+      .info-page {
+        padding: 24px 16px;
+      }
+    }
+
+    /* page tabs */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* === HERO POSTER === */
+    .hero-poster {
+      background: linear-gradient(135deg, var(--white) 0%, var(--gold-pale) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(201, 168, 76, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-poster-content {
+      flex: 1;
+      max-width: 60%;
+      z-index: 2;
+    }
+
+    .hero-poster-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--gold-deep);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-poster-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-poster-title em {
+      color: var(--gold-deep);
+      font-style: italic;
+    }
+
+    .hero-poster-desc {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .hero-poster-stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .hero-stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--gold-deep);
+    }
+
+    .hero-stat-lbl {
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .hero-poster-graphic {
+      flex-shrink: 0;
+      width: 32%;
+      max-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .hero-poster-img {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(139, 105, 20, 0.15);
+      border: 1px solid var(--border);
+    }
+
+    /* === ANALYSIS PAGE === */
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .analysis-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .analysis-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .circular-progress-svg {
+      transform: rotate(-90deg);
+      margin-bottom: 16px;
+    }
+
+    .progress-ring-circle-bg {
+      stroke: var(--off-white);
+    }
+
+    .progress-ring-circle {
+      stroke: var(--gold);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+
+    .analysis-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .analysis-card-count {
+      font-size: 13px;
+      color: var(--ink-soft);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .analysis-card-size {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+    }
+
+    .analysis-card-exts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      margin-top: auto;
+    }
+
+    .analysis-ext-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--ink-soft);
+    }
+
+    /* === HISTORY TIMELINE === */
+    .history-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .history-timeline {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-height: 480px;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .history-list {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .history-list::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .history-item {
+      position: relative;
+      padding-bottom: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .history-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .history-node {
+      position: absolute;
+      left: -20px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .history-content {
+      flex: 1;
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .history-content strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .history-time {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+      display: block;
+    }
+
+    .history-empty {
+      text-align: center;
+      color: var(--ink-muted);
+      padding: 32px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-poster {
+        flex-direction: column;
+        padding: 20px;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .hero-poster-content {
+        max-width: 100%;
+      }
+
+      .hero-poster-graphic {
+        width: 100%;
+        max-height: 150px;
+      }
+
+      .hero-poster-img {
+        max-height: 150px;
+      }
+    }
+
+    /* === ANIMATIONS & TRANSITIONS === */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 8px rgba(201, 168, 76, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0);
+      }
+    }
+
+    .animate-slide-up {
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease both;
+    }
+
+    /* Apply animations and smooth transitions across the site */
+    @keyframes tabSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page.active {
+      animation: tabSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .hero-poster {
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .upload-zone {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .upload-zone.dragging {
+      animation: pulseGlow 1.5s infinite;
+    }
+
+    .file-card,
+    .folder-card {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .nav-item {
+      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .tabbar-tab {
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .analysis-card {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .info-card {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .guideline-step {
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    aside {
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    main {
+      transition: background-color 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">📜</div>
+      <div class="brand-name">Paperlink <span>Docs Organizer</span></div>
+    </div>
+    <div class="stats-bar">
+      <span>Files: <strong id="hdr-count">0</strong></span>
+      <span>Size: <strong id="hdr-size">0 B</strong></span>
+      <span>Categories: <strong id="hdr-cats">0</strong></span>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" id="night-mode-btn" onclick="toggleNightMode()">🌙 Night Mode</button>
+      <button class="header-btn" onclick="showQuickNote()">✏️ Quick Note</button>
+      <button class="header-btn" onclick="downloadAll()">⬇️ Export All</button>
+      <button class="header-btn gold" onclick="document.getElementById('file-input').click()">+ Upload Files</button>
+    </div>
+  </header>
+  <input type="file" id="file-input" multiple style="display:none" onchange="handleFiles(this.files)">
+
+  <!-- TOP PROGRESS BAR -->
+  <div id="nprogress">
+    <div id="nprogress-bar"></div>
+  </div>
+
+  <!-- TAB BAR -->
+  <nav class="tabbar" role="tablist">
+    <button class="tabbar-tab active" id="tab-organizer" onclick="switchTab('organizer')" role="tab">
+      <span class="tab-icon">🗂️</span> Organizer
+    </button>
+    <button class="tabbar-tab" id="tab-about" onclick="switchTab('about')" role="tab">
+      <span class="tab-icon">✨</span> About
+    </button>
+    <button class="tabbar-tab" id="tab-guidelines" onclick="switchTab('guidelines')" role="tab">
+      <span class="tab-icon">📋</span> Guidelines
+    </button>
+    <button class="tabbar-tab" id="tab-analysis" onclick="switchTab('analysis')" role="tab">
+      <span class="tab-icon">📊</span> Analysis
+    </button>
+    <div class="tabbar-right">
+      <span class="tabbar-kbd">Ctrl+N</span><span style="font-size:11px;color:var(--ink-muted);">new note</span>
+      <span class="tabbar-kbd">Ctrl+F</span><span style="font-size:11px;color:var(--ink-muted);">search</span>
+    </div>
+  </nav>
+
+  <!-- ======================== PAGE: ORGANIZER ======================== -->
+  <div id="page-organizer" class="page active">
+
+    <!-- APP -->
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside id="sidebar">
+        <div class="sidebar-section-title">Navigation</div>
+        <div class="nav-item active" onclick="setView('all')" id="nav-all">
+          <span class="nav-icon">🏠</span> All Files
+          <span class="nav-count" id="cnt-all">0</span>
+        </div>
+        <div class="nav-item" onclick="setView('recent')" id="nav-recent">
+          <span class="nav-icon">🕐</span> Recent
+          <span class="nav-count" id="cnt-recent">0</span>
+        </div>
+        <div class="nav-item" onclick="setView('starred')" id="nav-starred">
+          <span class="nav-icon">⭐</span> Starred
+          <span class="nav-count" id="cnt-starred">0</span>
+        </div>
+        <div class="nav-item" onclick="setView('notes')" id="nav-notes">
+          <span class="nav-icon">📝</span> Notes
+          <span class="nav-count" id="cnt-notes">0</span>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-title">Categories</div>
+        <div class="nav-item" onclick="setView('cat-document')" id="nav-cat-document">
+          <span class="nav-color-dot" style="background:#4338CA"></span> Documents
+          <span class="nav-count" id="cnt-document">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('document')"
+            title="Download Documents ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-image')" id="nav-cat-image">
+          <span class="nav-color-dot" style="background:#16A34A"></span> Images
+          <span class="nav-count" id="cnt-image">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('image')"
+            title="Download Images ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-spreadsheet')" id="nav-cat-spreadsheet">
+          <span class="nav-color-dot" style="background:#15803D"></span> Spreadsheets
+          <span class="nav-count" id="cnt-spreadsheet">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('spreadsheet')"
+            title="Download Spreadsheets ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-code')" id="nav-cat-code">
+          <span class="nav-color-dot" style="background:#0284C7"></span> Code
+          <span class="nav-count" id="cnt-code">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('code')"
+            title="Download Code ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-audio')" id="nav-cat-audio">
+          <span class="nav-color-dot" style="background:#9333EA"></span> Audio
+          <span class="nav-count" id="cnt-audio">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('audio')"
+            title="Download Audio ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-video')" id="nav-cat-video">
+          <span class="nav-color-dot" style="background:#EA580C"></span> Video
+          <span class="nav-count" id="cnt-video">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('video')"
+            title="Download Video ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-archive')" id="nav-cat-archive">
+          <span class="nav-color-dot" style="background:#D97706"></span> Archives
+          <span class="nav-count" id="cnt-archive">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('archive')"
+            title="Download Archives ZIP">⬇</span>
+        </div>
+        <div class="nav-item" onclick="setView('cat-other')" id="nav-cat-other">
+          <span class="nav-color-dot" style="background:#64748B"></span> Others
+          <span class="nav-count" id="cnt-other">0</span>
+          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('other')"
+            title="Download Others ZIP">⬇</span>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="storage-bar-wrap">
+          <div class="storage-bar-label">
+            <span>Storage Used</span>
+            <strong id="storage-pct">0%</strong>
+          </div>
+          <div class="storage-bar-track">
+            <div class="storage-bar-fill" id="storage-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+
+        <!-- HERO POSTER -->
+        <div class="hero-poster">
+          <div class="hero-poster-content">
+            <span class="hero-poster-badge">Premium Organizer</span>
+            <h2 class="hero-poster-title">Paperlink <em>Docs Organizer</em></h2>
+            <p class="hero-poster-desc">
+              Your browser-native digital document sanctuary. Seamlessly upload, tag, annotate, and organize your files.
+              Everything runs locally in your browser — private, elegant, and secure.
+            </p>
+            <div class="hero-poster-stats">
+              <div class="hero-stat-item">
+                <span class="hero-stat-val">100%</span>
+                <span class="hero-stat-lbl">Private & Local</span>
+              </div>
+              <div class="hero-stat-item">
+                <span class="hero-stat-val" id="poster-stat-files">0</span>
+                <span class="hero-stat-lbl">Managed Files</span>
+              </div>
+              <div class="hero-stat-item">
+                <span class="hero-stat-val" id="poster-stat-size">0 B</span>
+                <span class="hero-stat-lbl">Space Occupied</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-poster-graphic">
+            <img src="assets/docs_organizer_banner.png" alt="Document Organizer Poster" class="hero-poster-img"
+              onerror="this.style.display='none'">
+          </div>
+        </div>
+
+        <!-- UPLOAD PROGRESS -->
+        <div class="upload-progress" id="progress-wrap">
+          <div class="progress-label">
+            <span id="progress-label-text">Processing files...</span>
+            <span id="progress-pct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- QUICK NOTE EDITOR -->
+        <div class="quick-note-editor" id="quick-note-editor">
+          <div class="quick-note-toolbar">
+            <input type="text" id="note-title" placeholder="Note title..." />
+            <button class="btn btn-outline" onclick="closeQuickNote()">Cancel</button>
+            <button class="btn btn-gold" onclick="saveQuickNote()">💾 Save Note</button>
+          </div>
+          <textarea class="quick-note-textarea" id="note-content"
+            placeholder="Start writing your note here..."></textarea>
+        </div>
+
+        <!-- UPLOAD ZONE -->
+        <div class="upload-zone" id="upload-zone" ondragover="handleDragOver(event)" ondrop="handleDrop(event)"
+          ondragleave="handleDragLeave(event)" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">📂</div>
+          <div class="upload-title">Drop Files or Click to Upload</div>
+          <div class="upload-sub">
+            Files are stored locally in your browser — no server, no cloud.<br>
+            Automatically categorized and organized into folders.
+          </div>
+          <div class="upload-types">
+            <span class="type-badge">PDF</span>
+            <span class="type-badge">DOCX</span>
+            <span class="type-badge">XLSX</span>
+            <span class="type-badge">PNG</span>
+            <span class="type-badge">JPG</span>
+            <span class="type-badge">MP3</span>
+            <span class="type-badge">MP4</span>
+            <span class="type-badge">ZIP</span>
+            <span class="type-badge">JS</span>
+            <span class="type-badge">PY</span>
+            <span class="type-badge">TXT</span>
+            <span class="type-badge">+ more</span>
+          </div>
+        </div>
+
+        <!-- VIEW CONTROLS -->
+        <div class="view-controls">
+          <div class="view-title" id="view-title">All <span>Files</span></div>
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search files..." id="search-input" oninput="renderFiles()" />
+          </div>
+          <select class="sort-select" id="sort-select" onchange="renderFiles()">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+            <option value="size-desc">Largest First</option>
+            <option value="size-asc">Smallest First</option>
+          </select>
+          <div class="view-toggle">
+            <button id="view-grid" class="active" onclick="setLayout('grid')" title="Grid">⊞</button>
+            <button id="view-list" onclick="setLayout('list')" title="List">☰</button>
+          </div>
+        </div>
+
+        <!-- BULK BAR -->
+        <div class="bulk-bar" id="bulk-bar">
+          <span class="bulk-count" id="bulk-count">0 selected</span>
+          <button class="btn btn-outline" onclick="downloadSelected()">⬇️ Download Selected</button>
+          <button class="btn btn-outline" onclick="starSelected()">⭐ Star</button>
+          <button class="btn btn-danger" onclick="deleteSelected()">🗑 Delete</button>
+          <button class="btn btn-outline" onclick="clearSelection()">✕ Clear</button>
+        </div>
+
+        <!-- FILE CONTAINER -->
+        <div id="file-container"></div>
+
+      </main>
+    </div><!-- /.app -->
+  </div><!-- /#page-organizer -->
+
+  <!-- ======================== PAGE: ABOUT ======================== -->
+  <div id="page-about" class="page info-page">
+    <div class="info-hero">
+      <span class="info-hero-icon">📜</span>
+      <h1>Paperlink <em>Docs Organizer</em></h1>
+      <p>A professional, browser-native document organizer built for individuals who value elegance, speed, and privacy.
+        Every file stays on your device — no cloud, no accounts, no tracking.</p>
+      <div class="info-hero-tags">
+        <span class="info-hero-tag">🔒 100% Local</span>
+        <span class="info-hero-tag">⚡ Instant Upload</span>
+        <span class="info-hero-tag">📦 ZIP Export</span>
+        <span class="info-hero-tag">🏷️ Tags & Notes</span>
+        <span class="info-hero-tag">🎨 Gold & White</span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">What <em>Paperlink Docs Organizer</em> does</div>
+      <div class="info-section-sub">Everything you need to organize, annotate, and retrieve your digital files — in a
+        single HTML file.</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <span class="info-card-icon">🗂️</span>
+          <h3>Smart Categorization</h3>
+          <p>Files are automatically sorted into 8 categories — Documents, Images, Video, Audio, Code, Spreadsheets,
+            Archives, Notes — the moment you upload them.</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card-icon">🔍</span>
+          <h3>Instant Search</h3>
+          <p>Find any file by name, tag, or your own annotations. Full-text search runs locally with zero latency across
+            all your files.</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card-icon">📦</span>
+          <h3>Category ZIP Export</h3>
+          <p>Download all images, all videos, or any single category as a neatly organized ZIP file with one click. Or
+            export everything at once.</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card-icon">🏷️</span>
+          <h3>Tags & Annotations</h3>
+          <p>Add custom tags and personal notes to every file. Star important items for quick access. All metadata
+            persists across browser sessions.</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card-icon">📝</span>
+          <h3>Quick Notes</h3>
+          <p>Create plain-text notes directly in the app without uploading anything. Great for meeting minutes, ideas,
+            and reminders saved alongside your files.</p>
+        </div>
+        <div class="info-card">
+          <span class="info-card-icon">🔒</span>
+          <h3>Private by Design</h3>
+          <p>Nothing leaves your browser. No server, no analytics, no third-party requests except Google Fonts and the
+            JSZip library from cdnjs.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">Built with</div>
+      <div class="info-section-sub">A single self-contained HTML file using only open standards.</div>
+      <div class="info-grid">
+        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+          <span style="font-size:24px;">🌐</span>
+          <div>
+            <h3 style="font-size:15px;margin-bottom:2px;">Vanilla HTML / CSS / JS</h3>
+            <p style="font-size:12px;">No frameworks, no bundlers, no dependencies to maintain.</p>
+          </div>
+        </div>
+        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+          <span style="font-size:24px;">💾</span>
+          <div>
+            <h3 style="font-size:15px;margin-bottom:2px;">localStorage API</h3>
+            <p style="font-size:12px;">Files and metadata persist in your browser's local storage.</p>
+          </div>
+        </div>
+        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+          <span style="font-size:24px;">📦</span>
+          <div>
+            <h3 style="font-size:15px;margin-bottom:2px;">JSZip 3.10</h3>
+            <p style="font-size:12px;">Client-side ZIP creation for organized category exports.</p>
+          </div>
+        </div>
+        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+          <span style="font-size:24px;">🔤</span>
+          <div>
+            <h3 style="font-size:15px;margin-bottom:2px;">Cormorant Garamond + DM Sans</h3>
+            <p style="font-size:12px;">Editorial serif meets clean geometric sans-serif.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>💡 Pro tip:</strong> This entire application is a single <code
+        style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(255,255,255,0.6);padding:1px 5px;border-radius:3px;">digital_notes_organizer.html</code>
+      file. You can save it to your desktop, USB drive, or any local folder — it will always work offline, in any modern
+      browser.
+    </div>
+  </div>
+
+  <!-- ======================== PAGE: GUIDELINES ======================== -->
+  <div id="page-guidelines" class="page info-page">
+    <div class="info-section">
+      <div class="info-section-title">Getting <em>Started</em></div>
+      <div class="info-section-sub">Follow these steps to get the most out of Paperlink Organizer.</div>
+
+      <div class="guideline-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Upload Your Files</h4>
+          <p>Click the golden <strong>+ Upload Files</strong> button in the top-right, or simply drag and drop files
+            anywhere onto the upload zone. You can upload multiple files at once — there's no limit on file count, only
+            on your browser's available localStorage (~5–10 MB typical). A progress bar will track each upload.</p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Browse by Category</h4>
+          <p>Use the left sidebar to filter by category — <code>Documents</code>, <code>Images</code>,
+            <code>Code</code>, <code>Video</code>, and more. Files are auto-categorized based on their extension the
+            moment they're uploaded. You can also view <code>Recent</code> (last 7 days) or your <code>Starred</code>
+            items.
+          </p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Add Tags and Notes</h4>
+          <p>Click any file to open its detail panel. You can add searchable <strong>tags</strong> (press
+            <code>Enter</code> after each tag) and write a personal <strong>annotation</strong> in the notes field.
+            These are saved automatically to localStorage alongside the file metadata.
+          </p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Star Important Files</h4>
+          <p>Click the ☆ icon on any file card to star it. Starred files are accessible instantly from the
+            <code>Starred</code> section in the sidebar. Stars persist across sessions.
+          </p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Download by Category</h4>
+          <p>Each section heading has a <strong>Download as ZIP</strong> button. Hover over any category in the sidebar
+            to reveal a quick ⬇ button. Or use <strong>Export All</strong> in the header to download every file
+            organized into category sub-folders inside one ZIP.</p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Bulk Operations</h4>
+          <p>Hold <code>Ctrl</code> (or <code>Cmd</code> on Mac) and click multiple files to select them. A bulk action
+            bar appears at the top — you can <strong>star</strong>, <strong>download as ZIP</strong>, or
+            <strong>delete</strong> all selected files at once.
+          </p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Write Quick Notes</h4>
+          <p>Press <code>Ctrl+N</code> or click <strong>✏️ Quick Note</strong> to open the inline note editor. Give it a
+            title and write your content — it's saved as a <code>.note</code> file in the Notes category and is fully
+            searchable.</p>
+        </div>
+      </div>
+
+      <div class="guideline-step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Storage Limits</h4>
+          <p>Browser localStorage is typically limited to 5–10 MB depending on your browser. The storage bar in the
+            sidebar shows how much you've used. For large media files, download and remove them after archiving to keep
+            storage clear. Large files may trigger a quota warning.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>⚠️ Important:</strong> Paperlink stores files as base64 in localStorage. Clearing your browser data or
+      using Incognito/Private mode will erase your files. For permanent storage, always use <strong>Export All</strong>
+      to keep a backup ZIP on your disk.
+    </div>
+  </div>
+
+  <!-- ======================== PAGE: ANALYSIS ======================== -->
+  <div id="page-analysis" class="page info-page">
+    <div class="info-hero">
+      <span class="info-hero-icon">📊</span>
+      <h1>Collection <em>Analysis</em></h1>
+      <p>Analyze your files by category share, storage footprints, and trace the chronological history of all your local
+        document operations.</p>
+    </div>
+
+    <!-- Category Progress Bars Section -->
+    <div class="info-section">
+      <div class="info-section-title">Category <em>Distribution</em></div>
+      <div class="info-section-sub">Visual summary of your collections in golden circular progress bars (percentages
+        based on total files).</div>
+      <div class="analysis-grid" id="analysis-progress-grid">
+        <!-- Progress cards will be generated by JS -->
+      </div>
+    </div>
+
+    <!-- History Timeline Section -->
+    <div class="info-section">
+      <div class="history-header-row">
+        <div class="info-section-title" style="margin-bottom:0;">Activity <em>History</em></div>
+        <button class="btn btn-outline" style="padding: 5px 12px; font-size: 11px;" onclick="clearHistory()">🗑 Clear
+          History</button>
+      </div>
+      <div class="info-section-sub">Chronological feed of your document activities (uploads, updates, and deletes).
+      </div>
+      <div class="history-timeline">
+        <div class="history-list" id="history-timeline-list">
+          <!-- History items will be generated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">File Details</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="file-preview-info">
+          <div class="file-preview-icon" id="modal-icon"></div>
+          <div>
+            <div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;" id="modal-fname"></div>
+            <div style="font-size:12px;color:var(--ink-muted);" id="modal-fmeta"></div>
+          </div>
+        </div>
+        <div class="detail-grid" id="detail-grid"></div>
+
+        <div style="margin-bottom:16px;">
+          <label class="form-label">Tags</label>
+          <div class="tag-input-wrap" id="tag-wrap" onclick="focusTagInput()">
+            <input type="text" class="tag-input" id="tag-input" placeholder="Add tag, press Enter..."
+              onkeydown="handleTagInput(event)" />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Personal Notes</label>
+          <textarea class="notes-textarea" id="modal-notes" placeholder="Add personal notes or summary..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-danger" onclick="deleteCurrentFile()">🗑 Delete</button>
+          <button class="btn btn-outline" onclick="toggleStar()">⭐ <span id="star-label">Star</span></button>
+          <button class="btn btn-outline" onclick="downloadCurrent()">⬇️ Download</button>
+          <button class="btn btn-gold" onclick="saveFileDetails()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-wrap" id="toast-wrap"></div>
+
+  <script>
+    // ============================================================
+    //  STATE
+    // ============================================================
+    let files = [];          // array of file objects
+    let currentView = 'all';
+    let currentLayout = 'grid';
+    let selectedIds = new Set();
+    let currentFileId = null;
+    let historyLog = [];     // history timeline logs
+    let activeTab = 'organizer';
+    const MAX_STORAGE = 50 * 1024 * 1024; // 50 MB display limit
+
+    // ============================================================
+    //  STORAGE
+    // ============================================================
+    function saveToStorage() {
+      try {
+        const light = files.map(f => ({
+          id: f.id, name: f.name, size: f.size, type: f.type,
+          category: f.category, date: f.date, starred: f.starred,
+          tags: f.tags, notes: f.notes, isNote: f.isNote,
+          noteContent: f.noteContent || ''
+        }));
+        localStorage.setItem('paperlink_meta', JSON.stringify(light));
+        // store data separately per file to avoid quota
+        files.forEach(f => {
+          if (f.data) {
+            try { localStorage.setItem('paperlink_data_' + f.id, f.data); }
+            catch (e) { }
+          }
+        });
+        localStorage.setItem('paperlink_history', JSON.stringify(historyLog));
+      } catch (e) { toast('Storage quota exceeded — some files may not persist', 'error'); }
+    }
+
+    function loadFromStorage() {
+      try {
+        let meta = localStorage.getItem('paperlink_meta');
+        let oldFormat = false;
+        if (!meta) {
+          meta = localStorage.getItem('aurum_meta');
+          oldFormat = meta ? true : false;
+        }
+        if (!meta) return;
+        const parsed = JSON.parse(meta);
+        files = parsed.map(f => {
+          const key = oldFormat ? 'aurum_data_' + f.id : 'paperlink_data_' + f.id;
+          const data = localStorage.getItem(key) || null;
+          return { ...f, data };
+        });
+        if (oldFormat) {
+          saveToStorage();
+          parsed.forEach(f => {
+            localStorage.removeItem('aurum_data_' + f.id);
+          });
+          localStorage.removeItem('aurum_meta');
+          localStorage.removeItem('aurum_history');
+        }
+      } catch (e) { files = []; }
+
+      try {
+        historyLog = JSON.parse(localStorage.getItem('paperlink_history') || localStorage.getItem('aurum_history') || '[]');
+      } catch (e) { historyLog = []; }
+    }
+
+    // ============================================================
+    //  HISTORY MANAGEMENT
+    // ============================================================
+    function addHistoryLog(action, fileName, details, icon = '📝') {
+      historyLog.unshift({
+        id: 'h_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        timestamp: new Date().toISOString(),
+        action,
+        fileName,
+        details,
+        icon
+      });
+      if (historyLog.length > 100) historyLog.pop();
+      saveToStorage();
+      if (activeTab === 'analysis') renderHistory();
+    }
+
+    function clearHistory() {
+      if (confirm('Are you sure you want to clear your activity history?')) {
+        historyLog = [];
+        saveToStorage();
+        if (activeTab === 'analysis') renderHistory();
+        toast('Activity history cleared', 'info');
+      }
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history-timeline-list');
+      if (!container) return;
+
+      if (!historyLog.length) {
+        container.innerHTML = `<div class="history-empty">No activity history yet. File actions will be logged here.</div>`;
+        return;
+      }
+
+      container.innerHTML = historyLog.map(item => {
+        return `
+          <div class="history-item">
+            <div class="history-node">${item.icon || '📝'}</div>
+            <div class="history-content">
+              <div>${item.details}</div>
+              <span class="history-time">${formatDate(item.timestamp)} · ${formatDateFull(item.timestamp)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ============================================================
+    //  FILE CATEGORIZATION
+    // ============================================================
+    const CATEGORY_MAP = {
+      document: ['pdf', 'doc', 'docx', 'odt', 'rtf', 'txt', 'md', 'tex', 'pages', 'epub', 'pptx', 'ppt', 'odp', 'key'],
+      image: ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'svg', 'ico', 'tiff', 'avif', 'heic'],
+      video: ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'flv', 'webm', 'm4v', '3gp', 'ogv'],
+      audio: ['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'wma', 'opus', 'aiff'],
+      spreadsheet: ['xls', 'xlsx', 'csv', 'ods', 'numbers', 'tsv'],
+      code: ['js', 'ts', 'jsx', 'tsx', 'py', 'java', 'c', 'cpp', 'cs', 'go', 'rs', 'php', 'rb', 'swift', 'kt', 'html', 'css', 'scss', 'json', 'xml', 'yaml', 'yml', 'sh', 'sql', 'r', 'dart', 'lua', 'ps1'],
+      archive: ['zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'xz', 'iso', 'dmg'],
+      note: ['note']
+    };
+
+    function getCategory(filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      for (const [cat, exts] of Object.entries(CATEGORY_MAP)) {
+        if (exts.includes(ext)) return cat;
+      }
+      return 'other';
+    }
+
+    const CAT_ICONS = {
+      document: '📄', image: '🖼️', video: '🎬', audio: '🎵',
+      spreadsheet: '📊', code: '💻', archive: '📦', other: '📎', note: '📝'
+    };
+
+    const CAT_LABELS = {
+      document: 'Document', image: 'Image', video: 'Video', audio: 'Audio',
+      spreadsheet: 'Spreadsheet', code: 'Code', archive: 'Archive', other: 'Other', note: 'Note'
+    };
+
+    // ============================================================
+    //  FILE HANDLING
+    // ============================================================
+    function handleFiles(fileList) {
+      const arr = Array.from(fileList);
+      if (!arr.length) return;
+      const progress = document.getElementById('progress-wrap');
+      const fill = document.getElementById('progress-fill');
+      const pct = document.getElementById('progress-pct');
+      const label = document.getElementById('progress-label-text');
+      progress.classList.add('active');
+      let done = 0;
+      arr.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const id = 'f_' + Date.now() + '_' + i;
+          const category = getCategory(file.name);
+          files.push({
+            id, name: file.name, size: file.size,
+            type: file.type, category,
+            date: new Date().toISOString(),
+            starred: false, tags: [], notes: '',
+            data: e.target.result,
+            isNote: false, noteContent: ''
+          });
+          addHistoryLog('upload', file.name, `Uploaded file <strong>${file.name}</strong> (${formatSize(file.size)})`, '📤');
+          done++;
+          const p = Math.round((done / arr.length) * 100);
+          fill.style.width = p + '%';
+          pct.textContent = p + '%';
+          label.textContent = `Processing ${done}/${arr.length}: ${file.name}`;
+          if (done === arr.length) {
+            setTimeout(() => {
+              progress.classList.remove('active');
+              fill.style.width = '0%';
+              saveToStorage();
+              renderAll();
+              toast(`${arr.length} file${arr.length > 1 ? 's' : ''} uploaded successfully`, 'success');
+            }, 600);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('upload-zone').classList.add('dragging');
+    }
+    function handleDragLeave() {
+      document.getElementById('upload-zone').classList.remove('dragging');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('upload-zone').classList.remove('dragging');
+      handleFiles(e.dataTransfer.files);
+    }
+
+    // ============================================================
+    //  VIEW / FILTER
+    // ============================================================
+    function setView(v) {
+      npStart();
+      currentView = v;
+      selectedIds.clear();
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const navId = v.startsWith('cat-') ? 'nav-' + v : 'nav-' + v;
+      const navEl = document.getElementById(navId);
+      if (navEl) navEl.classList.add('active');
+      // view title
+      const titles = {
+        all: 'All <span>Files</span>', recent: 'Recent <span>Files</span>',
+        starred: 'Starred <span>Files</span>', notes: 'My <span>Notes</span>',
+        'cat-document': 'Documents', 'cat-image': 'Images',
+        'cat-spreadsheet': 'Spreadsheets', 'cat-code': 'Code Files',
+        'cat-audio': 'Audio', 'cat-video': 'Video', 'cat-archive': 'Archives',
+        'cat-other': 'Other <span>Files</span>'
+      };
+      document.getElementById('view-title').innerHTML = titles[v] || v;
+      renderFiles();
+    }
+
+    function getFilteredFiles() {
+      let f = [...files];
+      if (currentView === 'starred') f = f.filter(x => x.starred);
+      else if (currentView === 'notes') f = f.filter(x => x.isNote);
+      else if (currentView === 'recent') {
+        const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        f = f.filter(x => new Date(x.date).getTime() > cutoff);
+      } else if (currentView.startsWith('cat-')) {
+        const cat = currentView.replace('cat-', '');
+        f = f.filter(x => x.category === cat);
+      }
+      const q = document.getElementById('search-input')?.value.toLowerCase() || '';
+      if (q) f = f.filter(x =>
+        x.name.toLowerCase().includes(q) ||
+        (x.tags || []).some(t => t.toLowerCase().includes(q)) ||
+        (x.notes || '').toLowerCase().includes(q)
+      );
+      const sort = document.getElementById('sort-select')?.value || 'date-desc';
+      f.sort((a, b) => {
+        if (sort === 'date-desc') return new Date(b.date) - new Date(a.date);
+        if (sort === 'date-asc') return new Date(a.date) - new Date(b.date);
+        if (sort === 'name-asc') return a.name.localeCompare(b.name);
+        if (sort === 'name-desc') return b.name.localeCompare(a.name);
+        if (sort === 'size-desc') return b.size - a.size;
+        if (sort === 'size-asc') return a.size - b.size;
+        return 0;
+      });
+      return f;
+    }
+
+    // ============================================================
+    //  RENDER
+    // ============================================================
+    function renderFiles() {
+      const container = document.getElementById('file-container');
+      const filtered = getFilteredFiles();
+      updateBulkBar();
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>Nothing here yet</h3>
+      <p>Upload files or create a quick note to get started.</p>
+    </div>`;
+        return;
+      }
+
+      if (currentView === 'all' || currentView.startsWith('cat-')) {
+        // Group by category when in all/cat view
+        const groups = {};
+        filtered.forEach(f => {
+          const g = f.category;
+          if (!groups[g]) groups[g] = [];
+          groups[g].push(f);
+        });
+        let html = '';
+        for (const [cat, catFiles] of Object.entries(groups)) {
+          html += `<div class="section-heading">${CAT_ICONS[cat]} ${CAT_LABELS[cat]} <small style="color:var(--ink-muted);font-size:12px;">(${catFiles.length} file${catFiles.length !== 1 ? 's' : ''})</small><button class="section-dl-btn" onclick="downloadCategory('${cat}', this)" title="Download all ${CAT_LABELS[cat]} as ZIP"><span class="dl-icon">⬇\uFE0F</span><span class="dl-spinner"></span> Download as ZIP</button></div>`;
+          if (currentLayout === 'grid') {
+            html += '<div class="files-grid">';
+            catFiles.forEach(f => html += renderCard(f));
+            html += '</div>';
+          } else {
+            html += '<div class="files-list">';
+            catFiles.forEach(f => html += renderRow(f));
+            html += '</div>';
+          }
+          html += '<br>';
+        }
+        container.innerHTML = html;
+      } else {
+        if (currentLayout === 'grid') {
+          container.innerHTML = '<div class="files-grid">' + filtered.map(renderCard).join('') + '</div>';
+        } else {
+          container.innerHTML = '<div class="files-list">' + filtered.map(renderRow).join('') + '</div>';
+        }
+      }
+    }
+
+    function renderCard(f) {
+      const sel = selectedIds.has(f.id) ? 'selected' : '';
+      const star = f.starred ? '⭐' : '';
+      const tags = (f.tags || []).slice(0, 2).map(t => `<span style="font-size:10px;color:var(--gold-deep);">#${t}</span>`).join(' ');
+      return `<div class="file-card ${sel}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')">
+    <div class="file-card-header">
+      <div class="file-icon-wrap icon-${f.category}">${f.isNote ? '📝' : CAT_ICONS[f.category]}</div>
+      <div class="file-actions-quick">
+        <div class="icon-btn" onclick="event.stopPropagation();toggleStarFile('${f.id}')" title="Star">${f.starred ? '⭐' : '☆'}</div>
+        <div class="icon-btn" onclick="event.stopPropagation();downloadFile('${f.id}')" title="Download">⬇️</div>
+        <div class="icon-btn danger" onclick="event.stopPropagation();confirmDelete('${f.id}')" title="Delete">🗑</div>
+      </div>
+    </div>
+    <div class="file-name">${star}${f.name}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">${tags}</div>
+    <div class="file-meta">
+      <span>${formatSize(f.size)}</span>
+      <span>·</span>
+      <span>${formatDate(f.date)}</span>
+    </div>
+    <span class="file-tag cat-${f.category}">${CAT_LABELS[f.category]}</span>
+  </div>`;
+    }
+
+    function renderRow(f) {
+      const sel = selectedIds.has(f.id) ? 'selected' : '';
+      return `<div class="file-row ${sel}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')">
+    <div class="file-icon-wrap icon-${f.category}">${f.isNote ? '📝' : CAT_ICONS[f.category]}</div>
+    <div class="file-name">${f.starred ? '⭐ ' : ''}${f.name}</div>
+    <div class="file-meta"><span>${formatSize(f.size)}</span></div>
+    <span class="file-tag cat-${f.category}">${CAT_LABELS[f.category]}</span>
+    <div class="file-meta"><span>${formatDate(f.date)}</span></div>
+    <div class="file-actions-quick" style="display:flex;gap:4px;">
+      <div class="icon-btn" onclick="event.stopPropagation();downloadFile('${f.id}')" title="Download">⬇️</div>
+      <div class="icon-btn danger" onclick="event.stopPropagation();confirmDelete('${f.id}')" title="Delete">🗑</div>
+    </div>
+  </div>`;
+    }
+
+    function handleCardClick(e, id) {
+      if (e.shiftKey || e.ctrlKey || e.metaKey) {
+        if (selectedIds.has(id)) selectedIds.delete(id);
+        else selectedIds.add(id);
+        const el = document.getElementById('card-' + id);
+        if (el) el.classList.toggle('selected', selectedIds.has(id));
+        updateBulkBar();
+      } else {
+        openFileModal(id);
+      }
+    }
+
+    function updateBulkBar() {
+      const bar = document.getElementById('bulk-bar');
+      if (selectedIds.size > 0) {
+        bar.classList.add('active');
+        document.getElementById('bulk-count').textContent = selectedIds.size + ' selected';
+      } else {
+        bar.classList.remove('active');
+      }
+    }
+
+    function clearSelection() {
+      selectedIds.clear();
+      document.querySelectorAll('.file-card.selected,.file-row.selected').forEach(el => el.classList.remove('selected'));
+      updateBulkBar();
+    }
+
+    // ============================================================
+    //  COUNTS & SIDEBAR
+    // ============================================================
+    function updateCounts() {
+      const total = files.length;
+      document.getElementById('cnt-all').textContent = total;
+      document.getElementById('hdr-count').textContent = total;
+
+      const cats = {};
+      files.forEach(f => { cats[f.category] = (cats[f.category] || 0) + 1; });
+      ['document', 'image', 'spreadsheet', 'code', 'audio', 'video', 'archive', 'other'].forEach(c => {
+        const el = document.getElementById('cnt-' + c);
+        if (el) el.textContent = cats[c] || 0;
+      });
+
+      const recent = files.filter(f => new Date(f.date) > new Date(Date.now() - 7 * 86400000));
+      document.getElementById('cnt-recent').textContent = recent.length;
+      document.getElementById('cnt-starred').textContent = files.filter(f => f.starred).length;
+      document.getElementById('cnt-notes').textContent = files.filter(f => f.isNote).length;
+
+      const totalSize = files.reduce((s, f) => s + f.size, 0);
+      document.getElementById('hdr-size').textContent = formatSize(totalSize);
+      document.getElementById('hdr-cats').textContent = Object.keys(cats).length;
+
+      const pct = Math.min(100, Math.round((totalSize / MAX_STORAGE) * 100));
+      document.getElementById('storage-pct').textContent = pct + '%';
+      document.getElementById('storage-fill').style.width = pct + '%';
+
+      // Update poster stats
+      const posterFiles = document.getElementById('poster-stat-files');
+      const posterSize = document.getElementById('poster-stat-size');
+      if (posterFiles) posterFiles.textContent = total;
+      if (posterSize) posterSize.textContent = formatSize(totalSize);
+    }
+
+    function renderAll() {
+      updateCounts();
+      renderFiles();
+    }
+
+    // ============================================================
+    //  MODAL
+    // ============================================================
+    let modalTags = [];
+
+    function openFileModal(id) {
+      currentFileId = id;
+      const f = files.find(x => x.id === id);
+      if (!f) return;
+
+      document.getElementById('modal-title').textContent = 'File Details';
+      document.getElementById('modal-fname').textContent = f.name;
+      document.getElementById('modal-fmeta').textContent = `${CAT_LABELS[f.category]} · ${formatSize(f.size)}`;
+
+      const iconEl = document.getElementById('modal-icon');
+      iconEl.className = 'file-preview-icon icon-' + f.category;
+      iconEl.textContent = f.isNote ? '📝' : CAT_ICONS[f.category];
+
+      document.getElementById('detail-grid').innerHTML = `
+    <div class="detail-item"><div class="detail-label">File Name</div><div class="detail-value" style="word-break:break-all;">${f.name}</div></div>
+    <div class="detail-item"><div class="detail-label">Category</div><div class="detail-value">${CAT_LABELS[f.category]}</div></div>
+    <div class="detail-item"><div class="detail-label">File Size</div><div class="detail-value">${formatSize(f.size)}</div></div>
+    <div class="detail-item"><div class="detail-label">Uploaded</div><div class="detail-value">${formatDateFull(f.date)}</div></div>
+    <div class="detail-item"><div class="detail-label">Type</div><div class="detail-value" style="font-family:'DM Mono',monospace;font-size:12px;">${f.type || 'unknown'}</div></div>
+    <div class="detail-item"><div class="detail-label">Starred</div><div class="detail-value">${f.starred ? '⭐ Yes' : '— No'}</div></div>
+  `;
+
+      modalTags = [...(f.tags || [])];
+      document.getElementById('modal-notes').value = f.notes || '';
+      document.getElementById('star-label').textContent = f.starred ? 'Unstar' : 'Star';
+      renderModalTags();
+
+      document.getElementById('detail-modal').classList.add('open');
+    }
+
+    function renderModalTags() {
+      const wrap = document.getElementById('tag-wrap');
+      const input = document.getElementById('tag-input');
+      wrap.innerHTML = '';
+      modalTags.forEach((t, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'tag-chip';
+        chip.innerHTML = `${t}<button onclick="removeTag(${i})">✕</button>`;
+        wrap.appendChild(chip);
+      });
+      wrap.appendChild(input);
+    }
+
+    function removeTag(i) {
+      modalTags.splice(i, 1);
+      renderModalTags();
+    }
+
+    function handleTagInput(e) {
+      if ((e.key === 'Enter' || e.key === ',') && e.target.value.trim()) {
+        e.preventDefault();
+        const tag = e.target.value.trim().replace(/,/g, '').toLowerCase();
+        if (tag && !modalTags.includes(tag)) modalTags.push(tag);
+        e.target.value = '';
+        renderModalTags();
+        focusTagInput();
+      }
+    }
+
+    function focusTagInput() {
+      document.getElementById('tag-input').focus();
+    }
+
+    function saveFileDetails() {
+      const f = files.find(x => x.id === currentFileId);
+      if (!f) return;
+      f.tags = [...modalTags];
+      f.notes = document.getElementById('modal-notes').value;
+      saveToStorage();
+      renderAll();
+      closeModal();
+      addHistoryLog('update', f.name, `Updated details & tags for <strong>${f.name}</strong>`, '🏷️');
+      toast('Changes saved', 'success');
+    }
+
+    function toggleStar() {
+      const f = files.find(x => x.id === currentFileId);
+      if (!f) return;
+      f.starred = !f.starred;
+      document.getElementById('star-label').textContent = f.starred ? 'Unstar' : 'Star';
+      saveToStorage();
+      updateCounts();
+      addHistoryLog(f.starred ? 'star' : 'unstar', f.name, `${f.starred ? 'Starred' : 'Unstarred'} <strong>${f.name}</strong>`, '⭐');
+      toast(f.starred ? 'File starred ⭐' : 'Removed from starred', 'info');
+    }
+
+    function deleteCurrentFile() {
+      const f = files.find(x => x.id === currentFileId);
+      const name = f ? f.name : 'Unknown File';
+      files = files.filter(x => x.id !== currentFileId);
+      try { localStorage.removeItem('paperlink_data_' + currentFileId); } catch (e) { }
+      saveToStorage();
+      renderAll();
+      closeModal();
+      addHistoryLog('delete', name, `Deleted file <strong>${name}</strong>`, '🗑️');
+      toast('File deleted', 'info');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('open');
+      currentFileId = null;
+    }
+
+    // ============================================================
+    //  QUICK ACTIONS
+    // ============================================================
+    function toggleStarFile(id) {
+      const f = files.find(x => x.id === id);
+      if (!f) return;
+      f.starred = !f.starred;
+      saveToStorage();
+      renderAll();
+      addHistoryLog(f.starred ? 'star' : 'unstar', f.name, `${f.starred ? 'Starred' : 'Unstarred'} <strong>${f.name}</strong>`, '⭐');
+      toast(f.starred ? 'Starred ⭐' : 'Unstarred', 'info');
+    }
+
+    function confirmDelete(id) {
+      const f = files.find(x => x.id === id);
+      if (!f) return;
+      if (confirm(`Delete "${f.name}"?`)) {
+        const name = f.name;
+        files = files.filter(x => x.id !== id);
+        try { localStorage.removeItem('paperlink_data_' + id); } catch (e) { }
+        saveToStorage();
+        renderAll();
+        addHistoryLog('delete', name, `Deleted file <strong>${name}</strong>`, '🗑️');
+        toast('File deleted', 'info');
+      }
+    }
+
+    function deleteSelected() {
+      if (!selectedIds.size) return;
+      if (!confirm(`Delete ${selectedIds.size} selected files?`)) return;
+      selectedIds.forEach(id => {
+        const f = files.find(x => x.id === id);
+        if (f) {
+          const name = f.name;
+          files = files.filter(x => x.id !== id);
+          try { localStorage.removeItem('paperlink_data_' + id); } catch (e) { }
+          addHistoryLog('delete', name, `Deleted file <strong>${name}</strong> (bulk)`, '🗑️');
+        }
+      });
+      selectedIds.clear();
+      saveToStorage();
+      renderAll();
+      toast('Files deleted', 'info');
+    }
+
+    function starSelected() {
+      selectedIds.forEach(id => {
+        const f = files.find(x => x.id === id);
+        if (f) {
+          f.starred = true;
+          addHistoryLog('star', f.name, `Starred <strong>${f.name}</strong> (bulk)`, '⭐');
+        }
+      });
+      saveToStorage();
+      renderAll();
+      toast('Files starred ⭐', 'success');
+    }
+
+    // ============================================================
+    //  DOWNLOAD
+    // ============================================================
+    function downloadFile(id) {
+      const f = files.find(x => x.id === id);
+      if (!f || !f.data) { toast('File data not available', 'error'); return; }
+      const a = document.createElement('a');
+      a.href = f.data;
+      a.download = f.name;
+      a.click();
+      toast('Downloading ' + f.name, 'success');
+    }
+
+    function downloadCurrent() { downloadFile(currentFileId); }
+
+    async function downloadAll() {
+      const toZip = files.filter(f => f.data);
+      if (!toZip.length) { toast('No files to download', 'error'); return; }
+      toast('Creating ZIP...', 'info');
+      const zip = new JSZip();
+      const catFolders = {};
+      toZip.forEach(f => {
+        if (!catFolders[f.category]) catFolders[f.category] = zip.folder(CAT_LABELS[f.category]);
+        const base64 = f.data.split(',')[1];
+        catFolders[f.category].file(f.name, base64, { base64: true });
+      });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'PaperlinkOrganizer_Export.zip'; a.click();
+      URL.revokeObjectURL(url);
+      toast('ZIP downloaded successfully', 'success');
+    }
+
+    async function downloadSelected() {
+      const toZip = [...selectedIds].map(id => files.find(x => x.id === id)).filter(f => f && f.data);
+      if (!toZip.length) { toast('No file data available', 'error'); return; }
+      const zip = new JSZip();
+      const catFolders = {};
+      toZip.forEach(f => {
+        if (!catFolders[f.category]) catFolders[f.category] = zip.folder(CAT_LABELS[f.category]);
+        const base64 = f.data.split(',')[1];
+        catFolders[f.category].file(f.name, base64, { base64: true });
+      });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'PaperlinkOrganizer_Selected.zip'; a.click();
+      URL.revokeObjectURL(url);
+      toast('Selected files zipped', 'success');
+      clearSelection();
+    }
+
+    async function downloadCategoryById(cat) {
+      const dummy = { classList: { add: () => { }, remove: () => { } }, disabled: false };
+      await downloadCategory(cat, dummy);
+    }
+
+    async function downloadCategory(cat, btn) {
+      const catFiles = files.filter(f => f.category === cat && f.data);
+      if (!catFiles.length) { toast(`No ${CAT_LABELS[cat]} files to download`, 'error'); return; }
+      btn.classList.add('loading');
+      btn.disabled = true;
+      try {
+        const zip = new JSZip();
+        const folder = zip.folder(CAT_LABELS[cat]);
+        // handle duplicate filenames
+        const seen = {};
+        catFiles.forEach(f => {
+          const base64 = f.data.split(',')[1];
+          let fname = f.name;
+          if (seen[fname]) {
+            const dot = fname.lastIndexOf('.');
+            const name = dot > -1 ? fname.slice(0, dot) : fname;
+            const ext = dot > -1 ? fname.slice(dot) : '';
+            fname = `${name} (${seen[f.name]})${ext}`;
+          }
+          seen[f.name] = (seen[f.name] || 1) + 1;
+          folder.file(fname, base64, { base64: true });
+        });
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PaperlinkOrganizer_${CAT_LABELS[cat]}.zip`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast(`${catFiles.length} ${CAT_LABELS[cat]} file${catFiles.length !== 1 ? 's' : ''} downloaded`, 'success');
+      } catch (e) {
+        toast('Download failed: ' + e.message, 'error');
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    // ============================================================
+    //  QUICK NOTE
+    // ============================================================
+    function showQuickNote() {
+      const editor = document.getElementById('quick-note-editor');
+      editor.classList.add('active');
+      document.getElementById('note-title').focus();
+    }
+
+    function closeQuickNote() {
+      document.getElementById('quick-note-editor').classList.remove('active');
+      document.getElementById('note-title').value = '';
+      document.getElementById('note-content').value = '';
+    }
+
+    function saveQuickNote() {
+      const title = document.getElementById('note-title').value.trim() || 'Untitled Note';
+      const content = document.getElementById('note-content').value;
+      const id = 'f_note_' + Date.now();
+      const noteText = `# ${title}\n\n${content}`;
+      const blob = new Blob([noteText], { type: 'text/plain' });
+      const reader = new FileReader();
+      reader.onload = e => {
+        files.push({
+          id, name: title + '.note', size: blob.size,
+          type: 'text/plain', category: 'note',
+          date: new Date().toISOString(),
+          starred: false, tags: [], notes: '',
+          data: e.target.result, isNote: true,
+          noteContent: content
+        });
+        saveToStorage();
+        addHistoryLog('create_note', title + '.note', `Created quick note <strong>${title}.note</strong>`, '📝');
+        renderAll();
+        closeQuickNote();
+        toast('Note saved 📝', 'success');
+      };
+      reader.readAsDataURL(blob);
+    }
+
+    // ============================================================
+    //  LAYOUT
+    // ============================================================
+    function setLayout(l) {
+      currentLayout = l;
+      document.getElementById('view-grid').classList.toggle('active', l === 'grid');
+      document.getElementById('view-list').classList.toggle('active', l === 'list');
+      renderFiles();
+    }
+
+    // ============================================================
+    //  TOAST
+    // ============================================================
+    function toast(msg, type = 'info') {
+      const wrap = document.getElementById('toast-wrap');
+      const el = document.createElement('div');
+      el.className = 'toast ' + type;
+      const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+      el.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${msg}</span>`;
+      wrap.appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 350); }, 3000);
+    }
+
+    // ============================================================
+    //  FORMAT HELPERS
+    // ============================================================
+    function formatSize(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024, sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+    function formatDate(iso) {
+      const d = new Date(iso);
+      const now = new Date();
+      const diff = (now - d) / 1000;
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+    }
+    function formatDateFull(iso) {
+      return new Date(iso).toLocaleString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    // ============================================================
+    //  PROGRESS BAR
+    // ============================================================
+    let _npTimer = null;
+
+    function npStart() {
+      const bar = document.getElementById('nprogress-bar');
+      if (!bar) return;
+
+      if (_npTimer) {
+        clearTimeout(_npTimer);
+      }
+
+      // Reset progress bar instantly
+      bar.style.transition = 'none';
+      bar.style.width = '0%';
+      bar.style.opacity = '1';
+
+      // Force reflow
+      bar.offsetWidth;
+
+      // Start the 1-second transition to 100%
+      bar.style.transition = 'width 1s linear';
+      bar.style.width = '100%';
+
+      // After 1 second (1000ms), fade out
+      _npTimer = setTimeout(() => {
+        bar.style.transition = 'opacity 0.3s ease';
+        bar.style.opacity = '0';
+      }, 1000);
+    }
+
+    function npDone() {
+      // In this 1-second linear transition model, we do not cut it short.
+      // Doing nothing here guarantees that the bar takes exactly 1 second to complete.
+    }
+
+    // ============================================================
+    //  ANALYSIS & STATISTICS
+    // ============================================================
+    function renderAnalysis() {
+      const grid = document.getElementById('analysis-progress-grid');
+      if (!grid) return;
+
+      const total = files.length;
+      const catList = ['document', 'image', 'spreadsheet', 'code', 'audio', 'video', 'archive', 'note', 'other'];
+
+      let html = '';
+      catList.forEach(cat => {
+        const catFiles = files.filter(f => f.category === cat);
+        const count = catFiles.length;
+        const size = catFiles.reduce((sum, f) => sum + f.size, 0);
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+
+        // Extension breakdown
+        const extCounts = {};
+        catFiles.forEach(f => {
+          if (f.isNote) {
+            extCounts['note'] = (extCounts['note'] || 0) + 1;
+          } else {
+            const ext = f.name.split('.').pop().toLowerCase();
+            extCounts[ext] = (extCounts[ext] || 0) + 1;
+          }
+        });
+        const extsHtml = Object.entries(extCounts)
+          .slice(0, 3) // show top 3 extensions
+          .map(([ext, count]) => `<span class="analysis-ext-tag">${ext} (${count})</span>`)
+          .join('');
+
+        const label = CAT_LABELS[cat] || cat;
+        const icon = CAT_ICONS[cat] || '📎';
+
+        // Circumference for r=36 is 226.2
+        const C = 226.2;
+
+        html += `
+          <div class="analysis-card" data-pct="${pct}">
+            <svg width="100" height="100" class="circular-progress-svg">
+              <circle cx="50" cy="50" r="36" stroke-width="6" fill="transparent" class="progress-ring-circle-bg" />
+              <circle cx="50" cy="50" r="36" stroke-width="6" fill="transparent" class="progress-ring-circle" 
+                      stroke-dasharray="${C}" stroke-dashoffset="${C}" />
+              <text x="50" y="56" text-anchor="middle" font-family="'DM Sans'" font-size="14px" font-weight="bold" fill="var(--ink)" transform="rotate(90 50 50)">${pct}%</text>
+            </svg>
+            <div class="analysis-card-title">${icon} ${label}</div>
+            <div class="analysis-card-count">${count} file${count !== 1 ? 's' : ''}</div>
+            <div class="analysis-card-size">${formatSize(size)}</div>
+            <div class="analysis-card-exts">${extsHtml || '<span style="font-size:10px;color:var(--ink-muted);">empty</span>'}</div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+
+      // Animate progress rings
+      setTimeout(() => {
+        document.querySelectorAll('.analysis-grid .progress-ring-circle').forEach(circle => {
+          const card = circle.closest('.analysis-card');
+          const pct = parseInt(card.getAttribute('data-pct')) || 0;
+          const C = 226.2;
+          const offset = C - (pct / 100) * C;
+          circle.style.strokeDashoffset = offset;
+        });
+      }, 50);
+
+      renderHistory();
+    }
+
+    // ============================================================
+    //  NIGHT MODE
+    // ============================================================
+    function toggleNightMode() {
+      const body = document.body;
+      const isDark = body.classList.toggle('dark-mode');
+      localStorage.setItem('paperlink_theme', isDark ? 'dark' : 'light');
+      updateNightModeButton();
+      addHistoryLog('theme', 'System Theme', `Switched to <strong>${isDark ? 'Night Mode 🌙' : 'Day Mode ☀️'}</strong>`, isDark ? '🌙' : '☀️');
+    }
+
+    function updateNightModeButton() {
+      const btn = document.getElementById('night-mode-btn');
+      if (!btn) return;
+      const isDark = document.body.classList.contains('dark-mode');
+      btn.innerHTML = isDark ? '☀️ Day Mode' : '🌙 Night Mode';
+    }
+
+    // ============================================================
+    //  TAB SWITCHING
+    // ============================================================
+    const TAB_ORDER = ['organizer', 'about', 'guidelines', 'analysis'];
+
+    function switchTab(tab) {
+      activeTab = tab;
+      npStart();
+      // update tabs
+      TAB_ORDER.forEach(t => {
+        document.getElementById('tab-' + t)?.classList.toggle('active', t === tab);
+      });
+      // hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      setTimeout(() => {
+        const el = document.getElementById('page-' + tab);
+        if (el) el.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (tab === 'analysis') {
+          renderAnalysis();
+        }
+        npDone();
+      }, 60);
+    }
+
+    // ============================================================
+    //  INIT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      npStart();
+      loadFromStorage();
+
+      // Night Mode preference check
+      const savedTheme = localStorage.getItem('paperlink_theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+      updateNightModeButton();
+
+      renderAll();
+
+      // Close modal on overlay click
+      document.getElementById('detail-modal').addEventListener('click', function (e) {
+        if (e.target === this) closeModal();
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'n' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); showQuickNote(); }
+        if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          document.getElementById('search-input').focus();
+        }
+        // Alt + 1-4 for quick tab navigation
+        if (e.altKey && e.key >= '1' && e.key <= '4') {
+          const tabs = ['organizer', 'about', 'guidelines', 'analysis'];
+          const targetTab = tabs[parseInt(e.key) - 1];
+          if (targetTab) {
+            e.preventDefault();
+            switchTab(targetTab);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
