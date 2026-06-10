@@ -7,61 +7,61 @@
   <title>Paperlink Connecting... — Digital Document Organizer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=Dancing+Script:wght@500;700&display=swap"
     rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C97A;
-      --gold-pale: #F7EDD3;
-      --gold-deep: #8B6914;
-      --gold-glow: #F5D98B;
-      --white: #FEFCF8;
-      --off-white: #F5F0E8;
-      --cream: #EDE5D4;
-      --ink: #1A1610;
-      --ink-mid: #3D3325;
-      --ink-soft: #6B5B42;
-      --ink-muted: #9C8B72;
-      --border: rgba(201, 168, 76, 0.25);
-      --border-strong: rgba(201, 168, 76, 0.5);
-      --shadow: 0 4px 32px rgba(139, 105, 20, 0.1);
-      --shadow-lg: 0 12px 60px rgba(139, 105, 20, 0.16);
+      --gold: #27272a;
+      --gold-light: #71717a;
+      --gold-pale: #e2e8f0;
+      --gold-deep: #09090b;
+      --gold-glow: #e4e4e7;
+      --white: #ffffff;
+      --off-white: #e8eaec;
+      --cream: #cbd5e1;
+      --ink: #18181b;
+      --ink-mid: #27272a;
+      --ink-soft: #52525b;
+      --ink-muted: #71717a;
+      --border: rgba(24, 24, 27, 0.08);
+      --border-strong: rgba(24, 24, 27, 0.16);
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.06);
       --radius: 12px;
       --radius-sm: 8px;
       --radius-lg: 20px;
-      --header-bg: #D5C069;
-      --btn-header-bg: #3D3325;
-      --btn-header-border: #8B6914;
-      --header-text: #4A3B12;
-      --header-text-span: #5C4A1A;
-      --header-stats-label: rgba(74, 59, 18, 0.85);
+      --header-bg: rgba(176, 178, 180, 0.85);
+      --btn-header-bg: #27272a;
+      --btn-header-border: rgba(255, 255, 255, 0.15);
+      --header-text: #18181b;
+      --header-text-span: #52525b;
+      --header-stats-label: rgba(24, 24, 27, 0.65);
     }
 
     body.dark-mode {
-      --gold: #D5C069;
-      --gold-light: #F2E3A4;
-      --gold-pale: #262118;
-      --gold-deep: #BFA74E;
-      --gold-glow: #F7EAB0;
-      --white: #1A1713;
-      --off-white: #12100E;
-      --cream: #262018;
-      --ink: #F7F3EB;
-      --ink-mid: #ECE3D7;
-      --ink-soft: #D4C6B5;
-      --ink-muted: #968875;
-      --border: rgba(232, 201, 122, 0.15);
-      --border-strong: rgba(232, 201, 122, 0.35);
-      --shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 12px 60px rgba(0, 0, 0, 0.65);
-      --header-bg: #211C13;
-      --btn-header-bg: #2E261B;
-      --btn-header-border: #D5C069;
-      --header-text: #F2E3A4;
-      --header-text-span: #FEFCF8;
-      --header-stats-label: rgba(242, 227, 164, 0.85);
+      --gold: #d4d4d8;
+      --gold-light: #fafafa;
+      --gold-pale: #27272a;
+      --gold-deep: #ffffff;
+      --gold-glow: rgba(255, 255, 255, 0.15);
+      --white: #18181b;
+      --off-white: #09090b;
+      --cream: #27272a;
+      --ink: #f4f4f5;
+      --ink-mid: #e4e4e7;
+      --ink-soft: #a1a1aa;
+      --ink-muted: #71717a;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+      --header-bg: rgba(18, 18, 24, 0.85);
+      --btn-header-bg: #27272a;
+      --btn-header-border: rgba(255, 255, 255, 0.12);
+      --header-text: #f4f4f5;
+      --header-text-span: #a1a1aa;
+      --header-stats-label: rgba(244, 244, 245, 0.6);
     }
 
     * {
@@ -85,8 +85,8 @@
       position: fixed;
       inset: 0;
       background-image:
-        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(201, 168, 76, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
+        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(148, 163, 184, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(148, 163, 184, 0.05) 0%, transparent 50%);
       pointer-events: none;
       z-index: 0;
     }
@@ -95,7 +95,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: var(--header-bg, #D5C069);
+      background: var(--header-bg, #f4f4f5);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
@@ -126,33 +126,40 @@
 
     .brand-name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 600;
+      font-size: 25px;
+      font-weight: 700;
       color: var(--header-text);
-      letter-spacing: 0.02em;
+      letter-spacing: -0.01em;
     }
 
-    .brand-name span {
-      color: var(--header-text-span);
+    .brand-name .cursive-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--header-text);
+      letter-spacing: 0.02em;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      box-shadow: none;
+      transition: all 0.3s ease;
     }
 
     .header-btn {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 7px 14px;
-      border: 2px solid var(--btn-header-border);
+      padding: 8px 16px;
+      border: 1px solid var(--btn-header-border);
       border-radius: var(--radius-sm);
-      /* curved corners */
-      background: var(--header-bg);
-      /* bg matching header bg */
-      color: white !important;
+      background: var(--btn-header-bg);
+      color: #ffffff !important;
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 600;
@@ -161,23 +168,23 @@
     }
 
     .header-btn:hover {
-      background: var(--btn-header-bg);
-      border-color: var(--gold-light);
-      color: white !important;
+      background: #3f3f46;
+      border-color: #3f3f46;
+      color: #ffffff !important;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
+      box-shadow: var(--shadow);
     }
 
     .header-btn.gold {
       background: var(--btn-header-bg);
-      border-color: var(--gold-light);
-      color: white !important;
+      border-color: var(--btn-header-border);
+      color: #ffffff !important;
     }
 
     .header-btn.gold:hover {
-      background: var(--header-bg);
-      border-color: var(--gold);
-      color: white !important;
+      background: #3f3f46;
+      border-color: #3f3f46;
+      color: #ffffff !important;
     }
 
     .stats-bar {
@@ -211,7 +218,7 @@
       opacity: 0;
       transition: width 0.25s ease, opacity 0.3s ease;
       position: relative;
-      box-shadow: 0 0 10px rgba(201, 168, 76, 0.7), 0 0 4px rgba(201, 168, 76, 0.5);
+      box-shadow: 0 0 10px rgba(148, 163, 184, 0.6), 0 0 4px rgba(148, 163, 184, 0.4);
     }
 
     #nprogress-bar::after {
@@ -221,7 +228,7 @@
       top: -2px;
       width: 80px;
       height: 7px;
-      background: radial-gradient(ellipse at right, rgba(248, 220, 120, 0.9) 0%, transparent 80%);
+      background: radial-gradient(ellipse at right, rgba(203, 213, 225, 0.9) 0%, transparent 80%);
       border-radius: 4px;
     }
 
@@ -235,17 +242,29 @@
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
       display: flex;
-      align-items: stretch;
-      height: 48px;
+      align-items: center;
+      height: 58px;
       gap: 0;
       transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .tabs-frame {
+      display: flex;
+      background: var(--off-white);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 4px;
+      align-self: center;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s ease;
     }
 
     .tabbar-tab {
       display: flex;
       align-items: center;
       gap: 7px;
-      padding: 0 20px;
+      padding: 6px 16px;
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 500;
@@ -253,9 +272,8 @@
       cursor: pointer;
       border: none;
       background: transparent;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: color 0.18s, border-color 0.18s;
+      border-radius: calc(var(--radius-sm) - 2px);
+      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
       white-space: nowrap;
       letter-spacing: 0.01em;
       position: relative;
@@ -263,11 +281,13 @@
 
     .tabbar-tab:hover {
       color: var(--ink);
+      background: rgba(24, 24, 27, 0.04);
     }
 
     .tabbar-tab.active {
       color: var(--gold-deep);
-      border-bottom-color: var(--gold);
+      background: var(--white);
+      box-shadow: var(--shadow);
       font-weight: 600;
     }
 
@@ -342,17 +362,22 @@
 
     .info-hero {
       text-align: center;
-      padding: 56px 32px 48px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 56px;
+      padding: 48px 32px;
+      background: var(--off-white);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      margin-bottom: 48px;
       position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .info-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(148, 163, 184, 0.08) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -364,7 +389,7 @@
 
     .info-hero h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 44px;
+      font-size: 40px;
       font-weight: 600;
       color: var(--ink);
       line-height: 1.15;
@@ -377,7 +402,7 @@
     }
 
     .info-hero p {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--ink-soft);
       line-height: 1.75;
       max-width: 580px;
@@ -405,7 +430,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
-      margin-bottom: 48px;
+      margin-bottom: 24px;
     }
 
     .info-card {
@@ -446,9 +471,19 @@
       margin-bottom: 48px;
     }
 
+    .info-section-frame {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      background: var(--off-white);
+      padding: 32px;
+      margin-bottom: 48px;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
     .info-section-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 600;
       color: var(--ink);
       margin-bottom: 6px;
@@ -466,16 +501,29 @@
       line-height: 1.6;
     }
 
+    .steps-frame {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
     .guideline-step {
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    .guideline-step:last-child {
-      border-bottom: none;
+    .guideline-step:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
     .step-num {
@@ -497,7 +545,7 @@
       font-size: 15px;
       font-weight: 600;
       color: var(--ink);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .step-body p {
@@ -559,7 +607,7 @@
       border-radius: 5px;
       padding: 3px 8px;
       color: var(--ink);
-      box-shadow: 0 1px 0 rgba(139, 105, 20, 0.2);
+      box-shadow: 0 1px 0 rgba(148, 163, 184, 0.25);
     }
 
     .kbd-plus {
@@ -652,18 +700,20 @@
     }
 
     .tag-new {
-      background: #ECFDF5;
-      color: #065F46;
+      background: #e4e4e7;
+      color: #27272a;
+      border: 1px solid var(--border-strong);
     }
 
     .tag-fix {
-      background: #FEF3C7;
-      color: #92400E;
+      background: #f4f4f5;
+      color: #18181b;
+      border: 1px solid var(--border);
     }
 
     .tag-improve {
-      background: #EFF6FF;
-      color: #1E40AF;
+      background: #27272a;
+      color: #ffffff;
     }
 
     .tip-box {
@@ -714,9 +764,14 @@
 
     .nav-item.active {
       background: var(--gold-pale);
-      border-color: var(--border);
-      color: var(--gold-deep);
-      font-weight: 500;
+      border-color: var(--border-strong);
+      color: var(--ink) !important;
+      font-weight: 600;
+    }
+
+    .nav-item.active:hover {
+      background: var(--gold-pale);
+      color: var(--ink) !important;
     }
 
     .nav-item .nav-icon {
@@ -763,9 +818,9 @@
     }
 
     .nav-item.active .nav-count {
-      background: var(--gold);
-      color: white;
-      border-color: var(--gold);
+      background: var(--white);
+      color: var(--gold);
+      border-color: var(--border-strong);
     }
 
     .nav-color-dot {
@@ -781,12 +836,24 @@
       margin: 8px 12px;
     }
 
+    .sidebar-section-group {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--off-white);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
     .storage-bar-wrap {
       margin-top: auto;
       padding: 12px;
       background: var(--off-white);
       border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-strong);
     }
 
     .storage-bar-label {
@@ -839,7 +906,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+      background: radial-gradient(ellipse at 50% 0%, rgba(148, 163, 184, 0.06) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -899,12 +966,18 @@
       align-items: center;
       gap: 12px;
       margin-bottom: 24px;
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 12px 20px;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .view-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 500;
+      font-size: 22px;
+      font-weight: 600;
       color: var(--ink);
       flex: 1;
     }
@@ -959,9 +1032,11 @@
 
     .view-toggle {
       display: flex;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-strong);
       border-radius: var(--radius-sm);
+      background: var(--off-white);
       overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .view-toggle button {
@@ -975,8 +1050,8 @@
     }
 
     .view-toggle button.active {
-      background: var(--gold-pale);
-      color: var(--gold-deep);
+      background: var(--btn-header-bg);
+      color: var(--ink);
     }
 
     /* === FILE GRID / LIST === */
@@ -1068,9 +1143,9 @@
     }
 
     .icon-btn.danger:hover {
-      background: #FEF2F2;
-      border-color: #FCA5A5;
-      color: #DC2626;
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      color: var(--gold-deep);
     }
 
     .file-name {
@@ -1248,7 +1323,7 @@
       background: var(--gold-pale);
       border-color: var(--gold);
       transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(201, 168, 76, 0.18);
+      box-shadow: 0 2px 8px rgba(148, 163, 184, 0.18);
     }
 
     .section-dl-btn:active {
@@ -1310,7 +1385,7 @@
       position: fixed;
       inset: 0;
       z-index: 500;
-      background: rgba(26, 22, 16, 0.6);
+      background: rgba(15, 23, 42, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1461,7 +1536,7 @@
     }
 
     .tag-chip button:hover {
-      color: #DC2626;
+      color: var(--gold-deep);
     }
 
     .tag-input {
@@ -1550,12 +1625,14 @@
 
     .btn-danger {
       background: transparent;
-      border: 1px solid #FCA5A5;
-      color: #DC2626;
+      border: 1.5px solid var(--border-strong);
+      color: var(--ink);
     }
 
     .btn-danger:hover {
-      background: #FEF2F2;
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      color: var(--gold-deep);
     }
 
     /* === TOAST === */
@@ -1597,16 +1674,15 @@
     }
 
     .toast.success {
-      background: var(--ink);
-      border-left: 3px solid #4CAF50;
+      border-left: 3px solid #71717a;
     }
 
     .toast.error {
-      border-left: 3px solid #EF4444;
+      border-left: 3px solid #27272a;
     }
 
     .toast.info {
-      border-left: 3px solid var(--gold);
+      border-left: 3px solid #a1a1aa;
     }
 
     /* === PROGRESS BAR === */
@@ -1652,10 +1728,27 @@
       align-items: center;
       gap: 12px;
       padding: 10px 16px;
-      background: var(--gold-pale);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      background: var(--off-white);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius);
       margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .info-page-frame {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+      transition: none;
+    }
+
+    @media (max-width: 768px) {
+      .info-page-frame {
+        padding: 0;
+      }
     }
 
     .bulk-bar.active {
@@ -1671,43 +1764,43 @@
 
     /* === CATEGORY COLORS === */
     .cat-document {
-      background: #EEF2FF;
-      color: #4338CA;
+      background: #f1f5f9;
+      color: #1e293b;
     }
 
     .cat-image {
-      background: #F0FDF4;
-      color: #16A34A;
+      background: #f4f4f5;
+      color: #27272a;
     }
 
     .cat-video {
-      background: #FFF7ED;
-      color: #EA580C;
+      background: #e2e8f0;
+      color: #334155;
     }
 
     .cat-audio {
-      background: #FDF4FF;
-      color: #9333EA;
+      background: #e4e4e7;
+      color: #52525b;
     }
 
     .cat-archive {
-      background: #FFFBEB;
-      color: #D97706;
+      background: #cbd5e1;
+      color: #0f172a;
     }
 
     .cat-code {
-      background: #F0F9FF;
-      color: #0284C7;
+      background: #d4d4d8;
+      color: #18181b;
     }
 
     .cat-spreadsheet {
-      background: #F0FDF4;
-      color: #15803D;
+      background: #e2e8f0;
+      color: #475569;
     }
 
     .cat-other {
-      background: #F8FAFC;
-      color: #64748B;
+      background: #f8fafc;
+      color: #64748b;
     }
 
     .cat-note {
@@ -1716,35 +1809,35 @@
     }
 
     .icon-document {
-      background: #EEF2FF;
+      background: #f1f5f9;
     }
 
     .icon-image {
-      background: #F0FDF4;
+      background: #f4f4f5;
     }
 
     .icon-video {
-      background: #FFF7ED;
+      background: #e2e8f0;
     }
 
     .icon-audio {
-      background: #FDF4FF;
+      background: #e4e4e7;
     }
 
     .icon-archive {
-      background: #FFFBEB;
+      background: #cbd5e1;
     }
 
     .icon-code {
-      background: #F0F9FF;
+      background: #d4d4d8;
     }
 
     .icon-spreadsheet {
-      background: #F0FDF4;
+      background: #e2e8f0;
     }
 
     .icon-other {
-      background: #F8FAFC;
+      background: #f8fafc;
     }
 
     .icon-note {
@@ -1754,22 +1847,25 @@
     /* === QUICK NOTE === */
     .quick-note-editor {
       background: var(--white);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-strong);
+      border-top: 4px solid var(--gold-light);
       border-radius: var(--radius);
       margin-bottom: 28px;
       overflow: hidden;
       display: none;
+      box-shadow: var(--shadow-lg);
     }
 
     .quick-note-editor.active {
       display: block;
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .quick-note-toolbar {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
+      gap: 12px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
       background: var(--off-white);
     }
@@ -1778,25 +1874,65 @@
       border: none;
       outline: none;
       background: transparent;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
       color: var(--ink);
       flex: 1;
+      padding: 4px 0;
+    }
+
+    .quick-note-toolbar input::placeholder {
+      color: var(--ink-muted);
     }
 
     .quick-note-textarea {
       width: 100%;
-      padding: 16px;
+      padding: 24px;
       border: none;
       outline: none;
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
-      color: var(--ink);
-      line-height: 1.7;
-      resize: none;
-      min-height: 140px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      resize: vertical;
+      min-height: 180px;
       background: transparent;
+    }
+
+    .note-preview-text {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      margin: 4px 0 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+    }
+
+    .note-row-preview {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .file-card.note-card {
+      border-top: 3px solid var(--gold-light);
+    }
+
+    .file-row.note-row {
+      border-left: 3px solid var(--gold-light);
     }
 
     /* === SCROLLBAR === */
@@ -1854,12 +1990,17 @@
 
       .tabbar {
         padding: 0 1rem;
-        gap: 0;
+        height: 64px;
+      }
+
+      .tabs-frame {
         overflow-x: auto;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
       }
 
       .tabbar-tab {
-        padding: 0 12px;
+        padding: 6px 12px;
         font-size: 12px;
       }
 
@@ -1867,12 +2008,38 @@
         display: none;
       }
 
+      .info-hero {
+        padding: 32px 16px;
+        margin-bottom: 32px;
+      }
+
       .info-hero h1 {
-        font-size: 30px;
+        font-size: 28px;
+      }
+
+      .info-section-frame {
+        padding: 20px 16px;
+        margin-bottom: 32px;
+      }
+
+      .guideline-step {
+        padding: 16px;
+        gap: 12px;
       }
 
       .info-page {
         padding: 24px 16px;
+      }
+
+      .view-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 16px;
+      }
+
+      .search-wrap input {
+        width: 100%;
       }
     }
 
@@ -1905,7 +2072,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 80% 20%, rgba(201, 168, 76, 0.12) 0%, transparent 60%);
+      background: radial-gradient(circle at 80% 20%, rgba(148, 163, 184, 0.12) 0%, transparent 60%);
       pointer-events: none;
     }
 
@@ -1986,7 +2153,7 @@
       max-height: 180px;
       object-fit: cover;
       border-radius: var(--radius);
-      box-shadow: 0 8px 24px rgba(139, 105, 20, 0.15);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
       border: 1px solid var(--border);
     }
 
@@ -2208,15 +2375,15 @@
 
     @keyframes pulseGlow {
       0% {
-        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4);
+        box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.4);
       }
 
       70% {
-        box-shadow: 0 0 0 8px rgba(201, 168, 76, 0);
+        box-shadow: 0 0 0 8px rgba(148, 163, 184, 0);
       }
 
       100% {
-        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0);
+        box-shadow: 0 0 0 0 rgba(148, 163, 184, 0);
       }
     }
 
@@ -2302,7 +2469,7 @@
   <header>
     <div class="brand">
       <div class="brand-icon">📜</div>
-      <div class="brand-name">Paperlink <span>Docs Organizer</span></div>
+      <div class="brand-name">Paperlink <span class="cursive-title">Docs Organizer</span></div>
     </div>
     <div class="stats-bar">
       <span>Files: <strong id="hdr-count">0</strong></span>
@@ -2325,20 +2492,22 @@
 
   <!-- TAB BAR -->
   <nav class="tabbar" role="tablist">
-    <button class="tabbar-tab active" id="tab-organizer" onclick="switchTab('organizer')" role="tab">
-      <span class="tab-icon">🗂️</span> Organizer
-    </button>
-    <button class="tabbar-tab" id="tab-about" onclick="switchTab('about')" role="tab">
-      <span class="tab-icon">✨</span> About
-    </button>
-    <button class="tabbar-tab" id="tab-guidelines" onclick="switchTab('guidelines')" role="tab">
-      <span class="tab-icon">📋</span> Guidelines
-    </button>
-    <button class="tabbar-tab" id="tab-analysis" onclick="switchTab('analysis')" role="tab">
-      <span class="tab-icon">📊</span> Analysis
-    </button>
+    <div class="tabs-frame">
+      <button class="tabbar-tab active" id="tab-organizer" onclick="switchTab('organizer')" role="tab">
+        <span class="tab-icon">🗂️</span> SECTIONS
+      </button>
+      <button class="tabbar-tab" id="tab-about" onclick="switchTab('about')" role="tab">
+        <span class="tab-icon">✨</span> ABOUT
+      </button>
+      <button class="tabbar-tab" id="tab-guidelines" onclick="switchTab('guidelines')" role="tab">
+        <span class="tab-icon">📋</span> GUIDELINES
+      </button>
+      <button class="tabbar-tab" id="tab-analysis" onclick="switchTab('analysis')" role="tab">
+        <span class="tab-icon">📊</span> ANALYSIS
+      </button>
+    </div>
     <div class="tabbar-right">
-      <span class="tabbar-kbd">Ctrl+N</span><span style="font-size:11px;color:var(--ink-muted);">new note</span>
+      <span class="tabbar-kbd">Ctrl+X</span><span style="font-size:11px;color:var(--ink-muted);">new note</span>
       <span class="tabbar-kbd">Ctrl+F</span><span style="font-size:11px;color:var(--ink-muted);">search</span>
     </div>
   </nav>
@@ -2351,71 +2520,74 @@
       <!-- SIDEBAR -->
       <aside id="sidebar">
         <div class="sidebar-section-title">Navigation</div>
-        <div class="nav-item active" onclick="setView('all')" id="nav-all">
-          <span class="nav-icon">🏠</span> All Files
-          <span class="nav-count" id="cnt-all">0</span>
+        <div class="sidebar-section-group">
+          <div class="nav-item active" onclick="setView('all')" id="nav-all">
+            <span class="nav-icon">🏠</span> All Files
+            <span class="nav-count" id="cnt-all">0</span>
+          </div>
+          <div class="nav-item" onclick="setView('recent')" id="nav-recent">
+            <span class="nav-icon">🕐</span> Recent
+            <span class="nav-count" id="cnt-recent">0</span>
+          </div>
+          <div class="nav-item" onclick="setView('starred')" id="nav-starred">
+            <span class="nav-icon">⭐</span> Starred
+            <span class="nav-count" id="cnt-starred">0</span>
+          </div>
+          <div class="nav-item" onclick="setView('notes')" id="nav-notes">
+            <span class="nav-icon">📝</span> Notes
+            <span class="nav-count" id="cnt-notes">0</span>
+          </div>
         </div>
-        <div class="nav-item" onclick="setView('recent')" id="nav-recent">
-          <span class="nav-icon">🕐</span> Recent
-          <span class="nav-count" id="cnt-recent">0</span>
-        </div>
-        <div class="nav-item" onclick="setView('starred')" id="nav-starred">
-          <span class="nav-icon">⭐</span> Starred
-          <span class="nav-count" id="cnt-starred">0</span>
-        </div>
-        <div class="nav-item" onclick="setView('notes')" id="nav-notes">
-          <span class="nav-icon">📝</span> Notes
-          <span class="nav-count" id="cnt-notes">0</span>
-        </div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-section-title">Categories</div>
-        <div class="nav-item" onclick="setView('cat-document')" id="nav-cat-document">
-          <span class="nav-color-dot" style="background:#4338CA"></span> Documents
-          <span class="nav-count" id="cnt-document">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('document')"
-            title="Download Documents ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-image')" id="nav-cat-image">
-          <span class="nav-color-dot" style="background:#16A34A"></span> Images
-          <span class="nav-count" id="cnt-image">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('image')"
-            title="Download Images ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-spreadsheet')" id="nav-cat-spreadsheet">
-          <span class="nav-color-dot" style="background:#15803D"></span> Spreadsheets
-          <span class="nav-count" id="cnt-spreadsheet">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('spreadsheet')"
-            title="Download Spreadsheets ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-code')" id="nav-cat-code">
-          <span class="nav-color-dot" style="background:#0284C7"></span> Code
-          <span class="nav-count" id="cnt-code">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('code')"
-            title="Download Code ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-audio')" id="nav-cat-audio">
-          <span class="nav-color-dot" style="background:#9333EA"></span> Audio
-          <span class="nav-count" id="cnt-audio">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('audio')"
-            title="Download Audio ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-video')" id="nav-cat-video">
-          <span class="nav-color-dot" style="background:#EA580C"></span> Video
-          <span class="nav-count" id="cnt-video">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('video')"
-            title="Download Video ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-archive')" id="nav-cat-archive">
-          <span class="nav-color-dot" style="background:#D97706"></span> Archives
-          <span class="nav-count" id="cnt-archive">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('archive')"
-            title="Download Archives ZIP">⬇</span>
-        </div>
-        <div class="nav-item" onclick="setView('cat-other')" id="nav-cat-other">
-          <span class="nav-color-dot" style="background:#64748B"></span> Others
-          <span class="nav-count" id="cnt-other">0</span>
-          <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('other')"
-            title="Download Others ZIP">⬇</span>
+        <div class="sidebar-section-title" style="margin-top: 16px;">Categories</div>
+        <div class="sidebar-section-group">
+          <div class="nav-item" onclick="setView('cat-document')" id="nav-cat-document">
+            <span class="nav-color-dot" style="background:#1f2937"></span> Documents
+            <span class="nav-count" id="cnt-document">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('document')"
+              title="Download Documents ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-image')" id="nav-cat-image">
+            <span class="nav-color-dot" style="background:#3f3f46"></span> Images
+            <span class="nav-count" id="cnt-image">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('image')"
+              title="Download Images ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-spreadsheet')" id="nav-cat-spreadsheet">
+            <span class="nav-color-dot" style="background:#52525b"></span> Spreadsheets
+            <span class="nav-count" id="cnt-spreadsheet">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('spreadsheet')"
+              title="Download Spreadsheets ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-code')" id="nav-cat-code">
+            <span class="nav-color-dot" style="background:#71717a"></span> Code
+            <span class="nav-count" id="cnt-code">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('code')"
+              title="Download Code ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-audio')" id="nav-cat-audio">
+            <span class="nav-color-dot" style="background:#a1a1aa"></span> Audio
+            <span class="nav-count" id="cnt-audio">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('audio')"
+              title="Download Audio ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-video')" id="nav-cat-video">
+            <span class="nav-color-dot" style="background:#d4d4d8"></span> Video
+            <span class="nav-count" id="cnt-video">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('video')"
+              title="Download Video ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-archive')" id="nav-cat-archive">
+            <span class="nav-color-dot" style="background:#e4e4e7"></span> Archives
+            <span class="nav-count" id="cnt-archive">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('archive')"
+              title="Download Archives ZIP">⬇</span>
+          </div>
+          <div class="nav-item" onclick="setView('cat-other')" id="nav-cat-other">
+            <span class="nav-color-dot" style="background:#f4f4f5"></span> Others
+            <span class="nav-count" id="cnt-other">0</span>
+            <span class="nav-dl" onclick="event.stopPropagation();downloadCategoryById('other')"
+              title="Download Others ZIP">⬇</span>
+          </div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="storage-bar-wrap">
@@ -2436,7 +2608,7 @@
         <div class="hero-poster">
           <div class="hero-poster-content">
             <span class="hero-poster-badge">Premium Organizer</span>
-            <h2 class="hero-poster-title">Paperlink <em>Docs Organizer</em></h2>
+            <h2 class="hero-poster-title">Paperlink <em>Digital Notes & Docs Organizer</em></h2>
             <p class="hero-poster-desc">
               Your browser-native digital document sanctuary. Seamlessly upload, tag, annotate, and organize your files.
               Everything runs locally in your browser — private, elegant, and secure.
@@ -2548,236 +2720,256 @@
 
   <!-- ======================== PAGE: ABOUT ======================== -->
   <div id="page-about" class="page info-page">
-    <div class="info-hero">
-      <span class="info-hero-icon">📜</span>
-      <h1>Paperlink <em>Docs Organizer</em></h1>
-      <p>A professional, browser-native document organizer built for individuals who value elegance, speed, and privacy.
-        Every file stays on your device — no cloud, no accounts, no tracking.</p>
-      <div class="info-hero-tags">
-        <span class="info-hero-tag">🔒 100% Local</span>
-        <span class="info-hero-tag">⚡ Instant Upload</span>
-        <span class="info-hero-tag">📦 ZIP Export</span>
-        <span class="info-hero-tag">🏷️ Tags & Notes</span>
-        <span class="info-hero-tag">🎨 Gold & White</span>
-      </div>
-    </div>
-
-    <div class="info-section">
-      <div class="info-section-title">What <em>Paperlink Docs Organizer</em> does</div>
-      <div class="info-section-sub">Everything you need to organize, annotate, and retrieve your digital files — in a
-        single HTML file.</div>
-      <div class="info-grid">
-        <div class="info-card">
-          <span class="info-card-icon">🗂️</span>
-          <h3>Smart Categorization</h3>
-          <p>Files are automatically sorted into 8 categories — Documents, Images, Video, Audio, Code, Spreadsheets,
-            Archives, Notes — the moment you upload them.</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-icon">🔍</span>
-          <h3>Instant Search</h3>
-          <p>Find any file by name, tag, or your own annotations. Full-text search runs locally with zero latency across
-            all your files.</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-icon">📦</span>
-          <h3>Category ZIP Export</h3>
-          <p>Download all images, all videos, or any single category as a neatly organized ZIP file with one click. Or
-            export everything at once.</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-icon">🏷️</span>
-          <h3>Tags & Annotations</h3>
-          <p>Add custom tags and personal notes to every file. Star important items for quick access. All metadata
-            persists across browser sessions.</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-icon">📝</span>
-          <h3>Quick Notes</h3>
-          <p>Create plain-text notes directly in the app without uploading anything. Great for meeting minutes, ideas,
-            and reminders saved alongside your files.</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-icon">🔒</span>
-          <h3>Private by Design</h3>
-          <p>Nothing leaves your browser. No server, no analytics, no third-party requests except Google Fonts and the
-            JSZip library from cdnjs.</p>
+    <div class="info-page-frame">
+      <div class="info-hero">
+        <span class="info-hero-icon">📜</span>
+        <h1>Paperlink <em>Docs Organizer</em></h1>
+        <p>A professional, browser-native document organizer built for individuals who value elegance, speed, and
+          privacy.
+          Every file stays on your device — no cloud, no accounts, no tracking.</p>
+        <div class="info-hero-tags">
+          <span class="info-hero-tag">🔒 100% Local</span>
+          <span class="info-hero-tag">⚡ Instant Upload</span>
+          <span class="info-hero-tag">📦 ZIP Export</span>
+          <span class="info-hero-tag">🏷️ Tags & Notes</span>
+          <span class="info-hero-tag">🎨 Grey-White & Slate</span>
         </div>
       </div>
-    </div>
 
-    <div class="info-section">
-      <div class="info-section-title">Built with</div>
-      <div class="info-section-sub">A single self-contained HTML file using only open standards.</div>
-      <div class="info-grid">
-        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
-          <span style="font-size:24px;">🌐</span>
-          <div>
-            <h3 style="font-size:15px;margin-bottom:2px;">Vanilla HTML / CSS / JS</h3>
-            <p style="font-size:12px;">No frameworks, no bundlers, no dependencies to maintain.</p>
+      <div class="info-section info-section-frame">
+        <div class="info-section-title">What <em>Paperlink Docs Organizer</em> does</div>
+        <div class="info-section-sub">Everything you need to organize, annotate, and retrieve your digital files — in a
+          single HTML file.</div>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-card-icon">🗂️</span>
+            <h3>Smart Categorization</h3>
+            <p>Files are automatically sorted into 8 categories — Documents, Images, Video, Audio, Code, Spreadsheets,
+              Archives, Notes — the moment you upload them.</p>
           </div>
-        </div>
-        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
-          <span style="font-size:24px;">💾</span>
-          <div>
-            <h3 style="font-size:15px;margin-bottom:2px;">localStorage API</h3>
-            <p style="font-size:12px;">Files and metadata persist in your browser's local storage.</p>
+          <div class="info-card">
+            <span class="info-card-icon">🔍</span>
+            <h3>Instant Search</h3>
+            <p>Find any file by name, tag, or your own annotations. Full-text search runs locally with zero latency
+              across
+              all your files.</p>
           </div>
-        </div>
-        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
-          <span style="font-size:24px;">📦</span>
-          <div>
-            <h3 style="font-size:15px;margin-bottom:2px;">JSZip 3.10</h3>
-            <p style="font-size:12px;">Client-side ZIP creation for organized category exports.</p>
+          <div class="info-card">
+            <span class="info-card-icon">📦</span>
+            <h3>Category ZIP Export</h3>
+            <p>Download all images, all videos, or any single category as a neatly organized ZIP file with one click. Or
+              export everything at once.</p>
           </div>
-        </div>
-        <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
-          <span style="font-size:24px;">🔤</span>
-          <div>
-            <h3 style="font-size:15px;margin-bottom:2px;">Cormorant Garamond + DM Sans</h3>
-            <p style="font-size:12px;">Editorial serif meets clean geometric sans-serif.</p>
+          <div class="info-card">
+            <span class="info-card-icon">🏷️</span>
+            <h3>Tags & Annotations</h3>
+            <p>Add custom tags and personal notes to every file. Star important items for quick access. All metadata
+              persists across browser sessions.</p>
+          </div>
+          <div class="info-card">
+            <span class="info-card-icon">📝</span>
+            <h3>Quick Notes</h3>
+            <p>Create plain-text notes directly in the app without uploading anything. Great for meeting minutes, ideas,
+              and reminders saved alongside your files.</p>
+          </div>
+          <div class="info-card">
+            <span class="info-card-icon">🔒</span>
+            <h3>Private by Design</h3>
+            <p>Nothing leaves your browser. No server, no analytics, no third-party requests except Google Fonts and the
+              JSZip library from cdnjs.</p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="tip-box">
-      <strong>💡 Pro tip:</strong> This entire application is a single <code
-        style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(255,255,255,0.6);padding:1px 5px;border-radius:3px;">digital_notes_organizer.html</code>
-      file. You can save it to your desktop, USB drive, or any local folder — it will always work offline, in any modern
-      browser.
+      <div class="info-section info-section-frame">
+        <div class="info-section-title">Built with</div>
+        <div class="info-section-sub">A single self-contained HTML file using only open standards.</div>
+        <div class="info-grid">
+          <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+            <span style="font-size:24px;">🌐</span>
+            <div>
+              <h3 style="font-size:15px;margin-bottom:2px;">Vanilla HTML / CSS / JS</h3>
+              <p style="font-size:12px;">No frameworks, no bundlers, no dependencies to maintain.</p>
+            </div>
+          </div>
+          <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+            <span style="font-size:24px;">💾</span>
+            <div>
+              <h3 style="font-size:15px;margin-bottom:2px;">localStorage API</h3>
+              <p style="font-size:12px;">Files and metadata persist in your browser's local storage.</p>
+            </div>
+          </div>
+          <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+            <span style="font-size:24px;">📦</span>
+            <div>
+              <h3 style="font-size:15px;margin-bottom:2px;">JSZip 3.10</h3>
+              <p style="font-size:12px;">Client-side ZIP creation for organized category exports.</p>
+            </div>
+          </div>
+          <div class="info-card" style="display:flex;align-items:center;gap:14px;padding:16px 20px;">
+            <span style="font-size:24px;">🔤</span>
+            <div>
+              <h3 style="font-size:15px;margin-bottom:2px;">Cormorant Garamond + DM Sans</h3>
+              <p style="font-size:12px;">Editorial serif meets clean geometric sans-serif.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Pro tip:</strong> This entire application is a single <code
+          style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(255,255,255,0.6);padding:1px 5px;border-radius:3px;">digital_notes_organizer.html</code>
+        file. You can save it to your desktop, USB drive, or any local folder — it will always work offline, in any
+        modern
+        browser.
+      </div>
     </div>
   </div>
 
   <!-- ======================== PAGE: GUIDELINES ======================== -->
   <div id="page-guidelines" class="page info-page">
-    <div class="info-section">
-      <div class="info-section-title">Getting <em>Started</em></div>
-      <div class="info-section-sub">Follow these steps to get the most out of Paperlink Organizer.</div>
+    <div class="info-page-frame">
+      <div class="info-section info-section-frame">
+        <div class="info-section-title">Getting <em>Started</em></div>
+        <div class="info-section-sub">Follow these steps to get the most out of Paperlink Organizer.</div>
 
-      <div class="guideline-step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>Upload Your Files</h4>
-          <p>Click the golden <strong>+ Upload Files</strong> button in the top-right, or simply drag and drop files
-            anywhere onto the upload zone. You can upload multiple files at once — there's no limit on file count, only
-            on your browser's available localStorage (~5–10 MB typical). A progress bar will track each upload.</p>
+        <div class="steps-frame">
+          <div class="guideline-step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h4>Upload Your Files</h4>
+              <p>Click the <strong>+ Upload Files</strong> button in the top-right, or simply drag and drop files
+                anywhere onto the upload zone. You can upload multiple files at once — there's no limit on file count,
+                only
+                on your browser's available localStorage (~5–10 MB typical). A progress bar will track each upload.</p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h4>Browse by Category</h4>
+              <p>Use the left sidebar to filter by category — <code>Documents</code>, <code>Images</code>,
+                <code>Code</code>, <code>Video</code>, and more. Files are auto-categorized based on their extension the
+                moment they're uploaded. You can also view <code>Recent</code> (last 7 days) or your
+                <code>Starred</code>
+                items.
+              </p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h4>Add Tags and Notes</h4>
+              <p>Click any file to open its detail panel. You can add searchable <strong>tags</strong> (press
+                <code>Enter</code> after each tag) and write a personal <strong>annotation</strong> in the notes field.
+                These are saved automatically to localStorage alongside the file metadata.
+              </p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h4>Star Important Files</h4>
+              <p>Click the ☆ icon on any file card to star it. Starred files are accessible instantly from the
+                <code>Starred</code> section in the sidebar. Stars persist across sessions.
+              </p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h4>Download by Category</h4>
+              <p>Each section heading has a <strong>Download as ZIP</strong> button. Hover over any category in the
+                sidebar
+                to reveal a quick ⬇ button. Or use <strong>Export All</strong> in the header to download every file
+                organized into category sub-folders inside one ZIP.</p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <h4>Bulk Operations</h4>
+              <p>Hold <code>Ctrl</code> (or <code>Cmd</code> on Mac) and click multiple files to select them. A bulk
+                action
+                bar appears at the top — you can <strong>star</strong>, <strong>download as ZIP</strong>, or
+                <strong>delete</strong> all selected files at once.
+              </p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">7</div>
+            <div class="step-body">
+              <h4>Write Quick Notes</h4>
+              <p>Press <code>Ctrl+X</code> or click <strong>✏️ Quick Note</strong> to open the inline note editor. Give
+                it a
+                title and write your content — it's saved as a <code>.note</code> file in the Notes category and is
+                fully
+                searchable.</p>
+            </div>
+          </div>
+
+          <div class="guideline-step">
+            <div class="step-num">8</div>
+            <div class="step-body">
+              <h4>Storage Limits</h4>
+              <p>Browser localStorage is typically limited to 5–10 MB depending on your browser. The storage bar in the
+                sidebar shows how much you've used. For large media files, download and remove them after archiving to
+                keep
+                storage clear. Large files may trigger a quota warning.</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="guideline-step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>Browse by Category</h4>
-          <p>Use the left sidebar to filter by category — <code>Documents</code>, <code>Images</code>,
-            <code>Code</code>, <code>Video</code>, and more. Files are auto-categorized based on their extension the
-            moment they're uploaded. You can also view <code>Recent</code> (last 7 days) or your <code>Starred</code>
-            items.
-          </p>
-        </div>
+      <div class="tip-box">
+        <strong>⚠️ Important:</strong> Paperlink stores files as base64 in localStorage. Clearing your browser data or
+        using Incognito/Private mode will erase your files. For permanent storage, always use <strong>Export
+          All</strong>
+        to keep a backup ZIP on your disk.
       </div>
-
-      <div class="guideline-step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>Add Tags and Notes</h4>
-          <p>Click any file to open its detail panel. You can add searchable <strong>tags</strong> (press
-            <code>Enter</code> after each tag) and write a personal <strong>annotation</strong> in the notes field.
-            These are saved automatically to localStorage alongside the file metadata.
-          </p>
-        </div>
-      </div>
-
-      <div class="guideline-step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h4>Star Important Files</h4>
-          <p>Click the ☆ icon on any file card to star it. Starred files are accessible instantly from the
-            <code>Starred</code> section in the sidebar. Stars persist across sessions.
-          </p>
-        </div>
-      </div>
-
-      <div class="guideline-step">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h4>Download by Category</h4>
-          <p>Each section heading has a <strong>Download as ZIP</strong> button. Hover over any category in the sidebar
-            to reveal a quick ⬇ button. Or use <strong>Export All</strong> in the header to download every file
-            organized into category sub-folders inside one ZIP.</p>
-        </div>
-      </div>
-
-      <div class="guideline-step">
-        <div class="step-num">6</div>
-        <div class="step-body">
-          <h4>Bulk Operations</h4>
-          <p>Hold <code>Ctrl</code> (or <code>Cmd</code> on Mac) and click multiple files to select them. A bulk action
-            bar appears at the top — you can <strong>star</strong>, <strong>download as ZIP</strong>, or
-            <strong>delete</strong> all selected files at once.
-          </p>
-        </div>
-      </div>
-
-      <div class="guideline-step">
-        <div class="step-num">7</div>
-        <div class="step-body">
-          <h4>Write Quick Notes</h4>
-          <p>Press <code>Ctrl+N</code> or click <strong>✏️ Quick Note</strong> to open the inline note editor. Give it a
-            title and write your content — it's saved as a <code>.note</code> file in the Notes category and is fully
-            searchable.</p>
-        </div>
-      </div>
-
-      <div class="guideline-step">
-        <div class="step-num">8</div>
-        <div class="step-body">
-          <h4>Storage Limits</h4>
-          <p>Browser localStorage is typically limited to 5–10 MB depending on your browser. The storage bar in the
-            sidebar shows how much you've used. For large media files, download and remove them after archiving to keep
-            storage clear. Large files may trigger a quota warning.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="tip-box">
-      <strong>⚠️ Important:</strong> Paperlink stores files as base64 in localStorage. Clearing your browser data or
-      using Incognito/Private mode will erase your files. For permanent storage, always use <strong>Export All</strong>
-      to keep a backup ZIP on your disk.
     </div>
   </div>
 
   <!-- ======================== PAGE: ANALYSIS ======================== -->
   <div id="page-analysis" class="page info-page">
-    <div class="info-hero">
-      <span class="info-hero-icon">📊</span>
-      <h1>Collection <em>Analysis</em></h1>
-      <p>Analyze your files by category share, storage footprints, and trace the chronological history of all your local
-        document operations.</p>
-    </div>
+    <div class="info-page-frame">
+      <div class="info-hero">
+        <span class="info-hero-icon">📊</span>
+        <h1>Paperlink <em>Analysis</em></h1>
+        <p>Analyze your files by category share, storage footprints, and trace the chronological history of all your
+          local
+          document operations.</p>
+      </div>
 
-    <!-- Category Progress Bars Section -->
-    <div class="info-section">
-      <div class="info-section-title">Category <em>Distribution</em></div>
-      <div class="info-section-sub">Visual summary of your collections in golden circular progress bars (percentages
-        based on total files).</div>
-      <div class="analysis-grid" id="analysis-progress-grid">
-        <!-- Progress cards will be generated by JS -->
+      <!-- Category Progress Bars Section -->
+      <div class="info-section info-section-frame">
+        <div class="info-section-title">Category <em>Distribution</em></div>
+        <div class="info-section-sub">Visual summary of your collections in circular progress bars (percentages
+          based on total files).</div>
+        <div class="analysis-grid" id="analysis-progress-grid">
+          <!-- Progress cards will be generated by JS -->
+        </div>
       </div>
-    </div>
 
-    <!-- History Timeline Section -->
-    <div class="info-section">
-      <div class="history-header-row">
-        <div class="info-section-title" style="margin-bottom:0;">Activity <em>History</em></div>
-        <button class="btn btn-outline" style="padding: 5px 12px; font-size: 11px;" onclick="clearHistory()">🗑 Clear
-          History</button>
-      </div>
-      <div class="info-section-sub">Chronological feed of your document activities (uploads, updates, and deletes).
-      </div>
-      <div class="history-timeline">
-        <div class="history-list" id="history-timeline-list">
-          <!-- History items will be generated by JS -->
+      <!-- History Timeline Section -->
+      <div class="info-section info-section-frame">
+        <div class="history-header-row">
+          <div class="info-section-title" style="margin-bottom:0;">Activity <em>History</em></div>
+          <button class="btn btn-outline" style="padding: 5px 12px; font-size: 11px;" onclick="clearHistory()">🗑 Clear
+            History</button>
+        </div>
+        <div class="info-section-sub">Chronological feed of your document activities (uploads, updates, and deletes).
+        </div>
+        <div class="history-timeline">
+          <div class="history-list" id="history-timeline-list">
+            <!-- History items will be generated by JS -->
+          </div>
         </div>
       </div>
     </div>
@@ -3108,15 +3300,22 @@
           groups[g].push(f);
         });
         let html = '';
+        let globalIndex = 0;
         for (const [cat, catFiles] of Object.entries(groups)) {
           html += `<div class="section-heading">${CAT_ICONS[cat]} ${CAT_LABELS[cat]} <small style="color:var(--ink-muted);font-size:12px;">(${catFiles.length} file${catFiles.length !== 1 ? 's' : ''})</small><button class="section-dl-btn" onclick="downloadCategory('${cat}', this)" title="Download all ${CAT_LABELS[cat]} as ZIP"><span class="dl-icon">⬇\uFE0F</span><span class="dl-spinner"></span> Download as ZIP</button></div>`;
           if (currentLayout === 'grid') {
             html += '<div class="files-grid">';
-            catFiles.forEach(f => html += renderCard(f));
+            catFiles.forEach(f => {
+              html += renderCard(f, globalIndex);
+              globalIndex++;
+            });
             html += '</div>';
           } else {
             html += '<div class="files-list">';
-            catFiles.forEach(f => html += renderRow(f));
+            catFiles.forEach(f => {
+              html += renderRow(f, globalIndex);
+              globalIndex++;
+            });
             html += '</div>';
           }
           html += '<br>';
@@ -3124,18 +3323,28 @@
         container.innerHTML = html;
       } else {
         if (currentLayout === 'grid') {
-          container.innerHTML = '<div class="files-grid">' + filtered.map(renderCard).join('') + '</div>';
+          container.innerHTML = '<div class="files-grid">' + filtered.map((f, i) => renderCard(f, i)).join('') + '</div>';
         } else {
-          container.innerHTML = '<div class="files-list">' + filtered.map(renderRow).join('') + '</div>';
+          container.innerHTML = '<div class="files-list">' + filtered.map((f, i) => renderRow(f, i)).join('') + '</div>';
         }
       }
     }
 
-    function renderCard(f) {
+    function renderCard(f, index = 0) {
       const sel = selectedIds.has(f.id) ? 'selected' : '';
       const star = f.starred ? '⭐' : '';
       const tags = (f.tags || []).slice(0, 2).map(t => `<span style="font-size:10px;color:var(--gold-deep);">#${t}</span>`).join(' ');
-      return `<div class="file-card ${sel}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')">
+      const noteCardClass = f.isNote ? 'note-card' : '';
+
+      let notePreview = '';
+      if (f.isNote && f.noteContent) {
+        const clean = f.noteContent.replace(/<[^>]*>/g, '').slice(0, 100);
+        notePreview = `<div class="note-preview-text">${clean}</div>`;
+      }
+
+      const delay = (index % 12) * 0.04;
+
+      return `<div class="file-card ${sel} ${noteCardClass}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')" style="animation-delay: ${delay}s">
     <div class="file-card-header">
       <div class="file-icon-wrap icon-${f.category}">${f.isNote ? '📝' : CAT_ICONS[f.category]}</div>
       <div class="file-actions-quick">
@@ -3145,6 +3354,7 @@
       </div>
     </div>
     <div class="file-name">${star}${f.name}</div>
+    ${notePreview}
     <div style="display:flex;flex-wrap:wrap;gap:4px;">${tags}</div>
     <div class="file-meta">
       <span>${formatSize(f.size)}</span>
@@ -3155,11 +3365,21 @@
   </div>`;
     }
 
-    function renderRow(f) {
+    function renderRow(f, index = 0) {
       const sel = selectedIds.has(f.id) ? 'selected' : '';
-      return `<div class="file-row ${sel}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')">
+      const noteRowClass = f.isNote ? 'note-row' : '';
+      let notePreview = '';
+      if (f.isNote && f.noteContent) {
+        const clean = f.noteContent.replace(/<[^>]*>/g, '').slice(0, 120);
+        notePreview = `<div class="note-row-preview">${clean}</div>`;
+      }
+      const delay = (index % 12) * 0.04;
+      return `<div class="file-row ${sel} ${noteRowClass}" id="card-${f.id}" onclick="handleCardClick(event,'${f.id}')" style="animation-delay: ${delay}s">
     <div class="file-icon-wrap icon-${f.category}">${f.isNote ? '📝' : CAT_ICONS[f.category]}</div>
-    <div class="file-name">${f.starred ? '⭐ ' : ''}${f.name}</div>
+    <div style="flex: 1; min-width: 0;">
+      <div class="file-name">${f.starred ? '⭐ ' : ''}${f.name}</div>
+      ${notePreview}
+    </div>
     <div class="file-meta"><span>${formatSize(f.size)}</span></div>
     <span class="file-tag cat-${f.category}">${CAT_LABELS[f.category]}</span>
     <div class="file-meta"><span>${formatDate(f.date)}</span></div>
@@ -3762,7 +3982,13 @@
       // Keyboard shortcuts
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') closeModal();
-        if (e.key === 'n' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); showQuickNote(); }
+        if (e.key === 'x' && (e.ctrlKey || e.metaKey)) {
+          const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+          if (activeTag !== 'input' && activeTag !== 'textarea' && !(document.activeElement && document.activeElement.isContentEditable)) {
+            e.preventDefault();
+            showQuickNote();
+          }
+        }
         if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
           e.preventDefault();
           document.getElementById('search-input').focus();
