@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-\# 📚 Paperlink Notes \& Docs Organizer
+# 📚 Paperlink Notes \& Docs Organizer
 
 
 
